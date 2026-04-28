@@ -1,244 +1,825 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Jupiter</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --black: #000000;
-            --gold: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.5);
-            --deep-red: #2a0000;
-            --ivory: #fffff0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For My Jupiter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+  <style>
+    :root {
+      --black: #000000;
+      --gold: #d4af37;
+      --gold-soft: rgba(212, 175, 55, 0.18);
+      --gold-glow: rgba(212, 175, 55, 0.55);
+      --deep-red: #2a0000;
+      --rose-red: #6a0000;
+      --ivory: #fffff0;
+      --muted-ivory: rgba(255, 255, 240, 0.74);
+    }
 
-        body {
-            background-color: var(--black);
-            color: var(--ivory);
-            font-family: 'Cormorant Garamond', serif;
-            overflow-x: hidden;
-            transition: background 2.5s ease;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* 1. THE MIDNIGHT STAR (Constant Presence) */
-        #presence-star {
-            position: fixed; width: 5px; height: 5px; background: var(--gold);
-            border-radius: 50%; pointer-events: none; z-index: 25000;
-            box-shadow: 0 0 15px var(--gold), 0 0 30px var(--gold);
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-        }
+    html { scroll-behavior: smooth; }
 
-        /* 2. CUSTOM CURSOR */
-        #cursor { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 30000; }
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(106, 0, 0, 0.28), transparent 38%),
+        var(--black);
+      color: var(--ivory);
+      font-family: 'Cormorant Garamond', serif;
+      overflow-x: hidden;
+      transition: background 2.5s ease;
+    }
 
-        /* 3. REST MODE OVERLAY */
-        #presence-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, #1a0000 0%, #000000 100%);
-            z-index: 20000; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: opacity 3s ease;
-        }
-        #presence-overlay.active { opacity: 1; }
+    body.no-cursor, body.no-cursor * { cursor: none; }
 
-        /* HERO SECTION */
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; }
-        
-        .jhansy-title {
-            font-family: 'Great Vibes', cursive; font-size: clamp(4.5rem, 15vw, 10.5rem);
-            color: var(--gold); z-index: 10; display: flex; gap: 8px;
-        }
-        .jhansy-title span { opacity: 0; filter: blur(20px); animation: bloom 2s forwards; }
-        @keyframes bloom { to { opacity: 1; filter: blur(0); } }
+    button, .kiss-zone, .wish-orb, .memory-card { cursor: pointer; }
 
-        /* BREATHE GUIDE (The Coach) */
-        .breathe-box { margin: 60px 0; display: flex; flex-direction: column; align-items: center; z-index: 10; }
-        .breathe-circle {
-            width: 100px; height: 100px; border: 1px solid var(--gold); border-radius: 50%;
-            animation: breatheCycle 8s ease-in-out infinite;
-        }
-        @keyframes breatheCycle {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.8); opacity: 0.8; box-shadow: 0 0 50px var(--gold); }
-        }
-        #breathe-text { font-family: 'Cinzel'; font-size: 0.7rem; margin-top: 30px; letter-spacing: 4px; color: var(--gold); transition: 1s; }
+    canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+    }
 
-        /* DYNAMIC LETTER SECTION */
-        .letter-section { padding: 100px 15%; min-height: 100vh; display: flex; justify-content: center; }
-        .handwritten-container {
-            max-width: 700px; line-height: 1.8; font-size: 1.6rem;
-            font-style: italic; color: rgba(255, 255, 240, 0.8);
-        }
-        .typing-cursor { border-right: 2px solid var(--gold); animation: blink 0.7s infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
+    #aurora {
+      position: fixed;
+      inset: -20%;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.11), transparent 28%),
+        radial-gradient(circle at 80% 20%, rgba(106, 0, 0, 0.2), transparent 26%),
+        radial-gradient(circle at 50% 80%, rgba(212, 175, 55, 0.08), transparent 30%);
+      filter: blur(28px);
+      animation: auroraDrift 18s ease-in-out infinite alternate;
+    }
 
-        /* INTERACTION CARDS */
-        section { padding: 80px 10%; display: flex; flex-direction: column; align-items: center; }
-        .luxury-card {
-            background: rgba(5, 5, 5, 0.95); border: 1px solid rgba(212, 175, 55, 0.1);
-            padding: 60px; border-radius: 2px; width: 100%; max-width: 800px;
-            box-shadow: 0 40px 100px rgba(0,0,0,1); text-align: center;
-        }
+    @keyframes auroraDrift {
+      from { transform: translate3d(-2%, -1%, 0) scale(1); opacity: 0.75; }
+      to { transform: translate3d(2%, 3%, 0) scale(1.06); opacity: 1; }
+    }
 
-        /* THE KISS ZONE */
-        .kiss-zone {
-            width: 180px; height: 180px; border: 1px solid var(--gold); border-radius: 50%;
-            margin: 40px auto; display: flex; justify-content: center; align-items: center;
-            cursor: pointer; position: relative;
-        }
-        .kiss-zone::after {
-            content: ''; position: absolute; width: 100%; height: 100%;
-            border: 1px solid var(--gold); border-radius: 50%; animation: sonar 3s infinite;
-        }
-        @keyframes sonar { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.6); opacity: 0; } }
+    #presence-star {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 25000;
+      box-shadow: 0 0 15px var(--gold), 0 0 38px var(--gold);
+      transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s ease;
+    }
 
-        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
-        .cinzel { font-family: 'Cinzel'; letter-spacing: 4px; font-size: 0.75rem; text-transform: uppercase; opacity: 0.5; }
-    </style>
+    #cursor {
+      width: 10px;
+      height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 30000;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 20px var(--gold);
+      opacity: 0;
+      transition: opacity 0.35s ease, transform 0.12s ease;
+    }
+
+    #presence-overlay {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle, rgba(42, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.98) 70%);
+      z-index: 20000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 3s ease;
+      padding: 28px;
+    }
+
+    #presence-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .overlay-heart {
+      font-size: 3.5rem;
+      margin-bottom: 18px;
+      animation: heartbeat 2.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 18px rgba(212, 175, 55, 0.45));
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.14); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.1); }
+      70% { transform: scale(1); }
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      padding: 48px 20px;
+    }
+
+    .rose {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 0 14px rgba(255, 0, 0, 0.8));
+      animation: floatRose 5s ease-in-out infinite;
+    }
+
+    @keyframes floatRose {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-14px) rotate(2deg); }
+    }
+
+    .jhansy-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(4.5rem, 15vw, 10.5rem);
+      color: var(--gold);
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+      text-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
+    }
+
+    .jhansy-title span {
+      opacity: 0;
+      filter: blur(20px);
+      animation: bloom 2s forwards;
+    }
+
+    @keyframes bloom { to { opacity: 1; filter: blur(0); } }
+
+    .subtitle {
+      font-family: 'Cinzel', serif;
+      letter-spacing: 5px;
+      font-size: clamp(0.65rem, 2.2vw, 0.82rem);
+      color: rgba(255, 255, 240, 0.58);
+      margin-top: 8px;
+      text-transform: uppercase;
+    }
+
+    .breathe-box {
+      margin: 56px 0 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .breathe-circle {
+      width: 104px;
+      height: 104px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      animation: breatheCycle 8s ease-in-out infinite;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .breathe-circle::before {
+      content: '';
+      width: 64%;
+      height: 64%;
+      border-radius: 50%;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      position: absolute;
+    }
+
+    @keyframes breatheCycle {
+      0%, 100% { transform: scale(1); opacity: 0.34; }
+      50% { transform: scale(1.8); opacity: 0.82; box-shadow: 0 0 50px var(--gold-glow); }
+    }
+
+    #breathe-text {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      margin-top: 34px;
+      letter-spacing: 4px;
+      color: var(--gold);
+      transition: opacity 0.8s ease;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 28px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      color: rgba(255, 255, 240, 0.45);
+      animation: hintBounce 2.4s ease-in-out infinite;
+    }
+
+    @keyframes hintBounce {
+      0%, 100% { transform: translateY(0); opacity: 0.45; }
+      50% { transform: translateY(8px); opacity: 0.85; }
+    }
+
+    section {
+      padding: 90px 10%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .letter-section {
+      min-height: 100vh;
+      justify-content: center;
+    }
+
+    .handwritten-container {
+      max-width: 760px;
+      line-height: 1.85;
+      font-size: clamp(1.28rem, 3vw, 1.75rem);
+      font-style: italic;
+      color: var(--muted-ivory);
+      padding: 42px;
+      border-left: 1px solid rgba(212, 175, 55, 0.25);
+      background: linear-gradient(90deg, rgba(212, 175, 55, 0.055), transparent);
+    }
+
+    .typing-cursor {
+      border-right: 2px solid var(--gold);
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .luxury-card {
+      background: rgba(5, 5, 5, 0.84);
+      border: 1px solid rgba(212, 175, 55, 0.16);
+      padding: clamp(32px, 6vw, 62px);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 850px;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
+      text-align: center;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .luxury-card::before {
+      content: '';
+      position: absolute;
+      inset: 1px;
+      border-radius: 17px;
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), transparent 35%, rgba(106, 0, 0, 0.16));
+    }
+
+    .card-content { position: relative; z-index: 1; }
+
+    .script-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.8rem, 7vw, 3.8rem);
+      color: var(--gold);
+      line-height: 1.05;
+    }
+
+    .cinzel {
+      font-family: 'Cinzel', serif;
+      letter-spacing: 4px;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      opacity: 0.58;
+    }
+
+    .kiss-zone {
+      width: 184px;
+      height: 184px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      margin: 42px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .kiss-zone:hover { transform: scale(1.04); box-shadow: 0 0 45px rgba(212, 175, 55, 0.14); }
+
+    .kiss-zone.holding {
+      transform: scale(1.08);
+      box-shadow: 0 0 80px rgba(212, 175, 55, 0.28);
+    }
+
+    .kiss-zone::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      animation: sonar 3s infinite;
+    }
+
+    @keyframes sonar {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+
+    #kiss-icon { font-size: 2.65rem; transition: transform 0.3s ease; }
+    .kiss-zone.holding #kiss-icon { transform: scale(1.25); }
+
+    .wish-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 34px;
+    }
+
+    .wish-orb {
+      min-height: 130px;
+      border: 1px solid rgba(212, 175, 55, 0.18);
+      border-radius: 18px;
+      padding: 22px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: rgba(255, 255, 240, 0.025);
+      transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+    }
+
+    .wish-orb:hover {
+      transform: translateY(-6px);
+      border-color: rgba(212, 175, 55, 0.45);
+      background: rgba(212, 175, 55, 0.06);
+    }
+
+    .wish-orb span:first-child { font-size: 2rem; }
+
+    #wish-message {
+      margin-top: 30px;
+      min-height: 56px;
+      font-size: 1.35rem;
+      font-style: italic;
+      color: rgba(255, 255, 240, 0.8);
+    }
+
+    .memory-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 34px;
+    }
+
+    .memory-card {
+      min-height: 160px;
+      border-radius: 18px;
+      border: 1px solid rgba(212, 175, 55, 0.14);
+      background: linear-gradient(145deg, rgba(212, 175, 55, 0.055), rgba(255, 255, 240, 0.018));
+      padding: 26px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 1.28rem;
+      font-style: italic;
+      color: rgba(255, 255, 240, 0.76);
+      transition: transform 0.4s ease, border-color 0.4s ease;
+      transform-style: preserve-3d;
+    }
+
+    .memory-card:hover {
+      transform: rotateX(5deg) rotateY(-5deg) translateY(-6px);
+      border-color: rgba(212, 175, 55, 0.42);
+    }
+
+    .pulse-button {
+      margin-top: 34px;
+      border: 1px solid rgba(212, 175, 55, 0.55);
+      color: var(--gold);
+      background: transparent;
+      border-radius: 999px;
+      padding: 13px 22px;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 3px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .pulse-button:hover { background: rgba(212, 175, 55, 0.08); transform: translateY(-2px); }
+
+    #constellation-line {
+      width: min(600px, 82vw);
+      height: 180px;
+      margin-top: 26px;
+    }
+
+    .constellation-dot {
+      fill: var(--gold);
+      filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.8));
+    }
+
+    .constellation-path {
+      stroke: rgba(212, 175, 55, 0.6);
+      stroke-width: 1;
+      fill: none;
+      stroke-dasharray: 900;
+      stroke-dashoffset: 900;
+    }
+
+    .constellation-path.draw { animation: drawLine 4s ease forwards; }
+
+    @keyframes drawLine { to { stroke-dashoffset: 0; } }
+
+    footer {
+      padding: 100px 22px;
+      text-align: center;
+    }
+
+    .floating-note {
+      position: fixed;
+      pointer-events: none;
+      z-index: 40000;
+      color: var(--gold);
+      font-family: 'Great Vibes', cursive;
+      font-size: 2rem;
+      text-shadow: 0 0 12px rgba(212, 175, 55, 0.55);
+      animation: floatNote 1.8s ease-out forwards;
+    }
+
+    @keyframes floatNote {
+      from { transform: translateY(0) scale(0.9); opacity: 0; }
+      18% { opacity: 1; }
+      to { transform: translateY(-90px) scale(1.2); opacity: 0; }
+    }
+
+    @media (max-width: 760px) {
+      body.no-cursor, body.no-cursor * { cursor: auto; }
+      #cursor, #presence-star { display: none; }
+      section { padding: 74px 6%; }
+      .handwritten-container { padding: 30px 24px; }
+      .wish-grid, .memory-row { grid-template-columns: 1fr; }
+      .kiss-zone { width: 162px; height: 162px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <div id="aurora"></div>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div id="presence-star"></div>
+  <div id="cursor"></div>
 
-    <div id="presence-star"></div>
-    <div id="cursor"></div>
+  <div id="presence-overlay" role="dialog" aria-live="polite">
+    <div class="overlay-heart">🌙</div>
+    <h2 style="font-family: 'Great Vibes'; font-size: clamp(3rem, 10vw, 4.8rem); color: var(--gold);">Just sleep, Jupiter.</h2>
+    <p class="cinzel" style="margin-top: 20px;">I'm right here holding your hand.</p>
+    <button class="pulse-button" id="wakeBtn">I'M HERE</button>
+  </div>
 
-    <div id="presence-overlay">
-        <h2 style="font-family: 'Great Vibes'; font-size: 3.5rem; color: var(--gold);">Just sleep, Jupiter.</h2>
-        <p class="cinzel" style="margin-top: 20px;">I'm right here holding your hand.</p>
+  <section class="hero">
+    <div class="rose">🌹</div>
+    <h1 class="jhansy-title" id="nameRef" aria-label="Jhansy"></h1>
+    <p class="subtitle">A quiet universe made only for you</p>
+
+    <div class="breathe-box">
+      <div class="breathe-circle" aria-hidden="true"></div>
+      <p id="breathe-text">BREATHE WITH ME, JUPITER</p>
     </div>
 
-    <canvas id="starfield"></canvas>
+    <button class="pulse-button" id="startButton">Begin the little universe</button>
+    <div class="scroll-hint">SCROLL SLOWLY</div>
+  </section>
 
-    <section class="hero">
-        <div style="font-size: 3rem; margin-bottom: 10px; filter: drop-shadow(0 0 10px red);">🌹</div>
-        <h1 class="jhansy-title" id="nameRef"></h1>
-        
-        <div class="breathe-box">
-            <div class="breathe-circle"></div>
-            <p id="breathe-text">BREATHE WITH ME, JUPITER</p>
+  <section class="letter-section">
+    <div class="handwritten-container">
+      <span id="typewriter"></span><span class="typing-cursor"></span>
+    </div>
+  </section>
+
+  <section>
+    <div class="luxury-card">
+      <div class="card-content">
+        <h2 class="script-title">The Forehead Kiss</h2>
+        <p style="font-style: italic; opacity: 0.72; margin-top: 15px; font-size: 1.22rem;">A cure for the pain. Hold the circle.</p>
+        <div class="kiss-zone" id="kissZone" role="button" tabindex="0" aria-label="Hold to send warmth">
+          <span id="kiss-icon">✨</span>
         </div>
-    </section>
+        <p id="kiss-status" class="cinzel" style="color: var(--gold); margin-top: 20px;"></p>
+      </div>
+    </div>
+  </section>
 
-    <section class="letter-section">
-        <div class="handwritten-container">
-            <span id="typewriter"></span><span class="typing-cursor"></span>
+  <section>
+    <div class="luxury-card">
+      <div class="card-content">
+        <h2 class="script-title">Pick What You Need</h2>
+        <p style="font-style: italic; opacity: 0.72; margin-top: 15px; font-size: 1.2rem;">Tap one, and I’ll say the thing I would whisper if I was beside you.</p>
+
+        <div class="wish-grid">
+          <div class="wish-orb" data-message="You don’t have to be strong every second. Rest. I’ll be strong for both of us for a while.">
+            <span>🕯️</span><span class="cinzel">Comfort</span>
+          </div>
+          <div class="wish-orb" data-message="Drink a little water, my Jupiter. Tiny steps still count. I’m proud of you.">
+            <span>🍵</span><span class="cinzel">Care</span>
+          </div>
+          <div class="wish-orb" data-message="Close your eyes for ten seconds. I’m not going anywhere. I’m right here.">
+            <span>🌙</span><span class="cinzel">Sleep</span>
+          </div>
         </div>
-    </section>
 
-    <section>
-        <div class="luxury-card">
-            <h2 style="font-family: 'Great Vibes'; font-size: 3.2rem; color: var(--gold);">The Forehead Kiss</h2>
-            <p style="font-style: italic; opacity: 0.7; margin-top: 15px;">A cure for the pain. Hold the circle.</p>
-            <div class="kiss-zone" id="kissZone">
-                <span id="kiss-icon" style="font-size: 2.5rem;">✨</span>
-            </div>
-            <p id="kiss-status" class="cinzel" style="color: var(--gold); margin-top: 20px;"></p>
+        <p id="wish-message"></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="luxury-card">
+      <div class="card-content">
+        <h2 class="script-title">Our Little Constellation</h2>
+        <p style="font-style: italic; opacity: 0.72; margin-top: 15px; font-size: 1.2rem;">Even from Georgia to your heart, there is still a line between us.</p>
+
+        <svg id="constellation-line" viewBox="0 0 600 180" aria-hidden="true">
+          <path class="constellation-path" id="constellationPath" d="M50 130 C120 30, 190 55, 250 105 S380 165, 450 70 S535 30, 560 95" />
+          <circle class="constellation-dot" cx="50" cy="130" r="4" />
+          <circle class="constellation-dot" cx="170" cy="55" r="3.5" />
+          <circle class="constellation-dot" cx="250" cy="105" r="4" />
+          <circle class="constellation-dot" cx="390" cy="145" r="3.5" />
+          <circle class="constellation-dot" cx="450" cy="70" r="4" />
+          <circle class="constellation-dot" cx="560" cy="95" r="5" />
+        </svg>
+
+        <button class="pulse-button" id="drawConstellation">Draw the distance</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="luxury-card">
+      <div class="card-content">
+        <h2 class="script-title">Three Tiny Promises</h2>
+        <div class="memory-row">
+          <div class="memory-card">When it hurts, I’ll listen first.</div>
+          <div class="memory-card">When you’re tired, I’ll be gentle.</div>
+          <div class="memory-card">When you feel far, I’ll come closer.</div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <footer style="padding: 100px; text-align: center;">
-        <p class="cinzel">GEORGIA ————— 700 MILES ————— YOUR HEART</p>
-    </footer>
+  <footer>
+    <p class="cinzel">GEORGIA ————— 700 MILES ————— YOUR HEART</p>
+    <p style="margin-top: 28px; font-family: 'Great Vibes'; color: var(--gold); font-size: 2.4rem;">Always, always here.</p>
+  </footer>
 
-    <script>
-        // 1. Name Animation
-        const name = "Jhansy";
-        const nameRef = document.getElementById('nameRef');
-        name.split('').forEach((char, i) => {
-            const s = document.createElement('span');
-            s.textContent = char; s.style.animationDelay = `${0.5 + (i*0.2)}s`;
-            nameRef.appendChild(s);
-        });
+  <script>
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 
-        // 2. Midnight Star & Cursor
-        const cursor = document.getElementById('cursor');
-        const star = document.getElementById('presence-star');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            setTimeout(() => {
-                star.style.transform = `translate(${e.clientX + 20}px, ${e.clientY - 20}px)`;
-            }, 120);
-        });
+    if (!isTouchDevice) document.body.classList.add('no-cursor');
 
-        // 3. Breathe Text Toggle
-        setInterval(() => {
-            const bt = document.getElementById('breathe-text');
-            bt.textContent = bt.textContent === "IN..." ? "OUT..." : "IN...";
-        }, 4000);
+    // Name animation
+    const name = 'Jhansy';
+    const nameRef = document.getElementById('nameRef');
+    name.split('').forEach((char, i) => {
+      const s = document.createElement('span');
+      s.textContent = char;
+      s.style.animationDelay = `${0.5 + i * 0.2}s`;
+      nameRef.appendChild(s);
+    });
 
-        // 4. Hand-Written Typewriter (Trigger on Scroll)
-        const letterText = "I know it hurts right now, Jaanu. I wish I could reach through this screen and rub your back or bring you a warm tea. Since I'm 700 miles away, I built this space just for you. Every star you see, every breath this page takes, it's me. You are the strongest person I know, and I am right here with you, always. Rest your eyes, my Jupiter.";
-        let i = 0;
-        let started = false;
-        function typeWriter() {
-            if (i < letterText.length) {
-                document.getElementById("typewriter").innerHTML += letterText.charAt(i);
-                i++;
-                setTimeout(typeWriter, 50);
-            }
+    // Cursor and presence star
+    const cursor = document.getElementById('cursor');
+    const star = document.getElementById('presence-star');
+
+    if (!isTouchDevice) {
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.opacity = '1';
+        cursor.style.left = `${e.clientX}px`;
+        cursor.style.top = `${e.clientY}px`;
+        star.style.opacity = '1';
+        star.style.transform = `translate(${e.clientX + 22}px, ${e.clientY - 22}px)`;
+      });
+    }
+
+    // Floating notes on click
+    const notes = ['I love you', 'breathe', 'right here', 'my Jupiter', 'stay soft'];
+    function createFloatingNote(x, y) {
+      if (prefersReducedMotion) return;
+      const note = document.createElement('div');
+      note.className = 'floating-note';
+      note.textContent = notes[Math.floor(Math.random() * notes.length)];
+      note.style.left = `${x}px`;
+      note.style.top = `${y}px`;
+      document.body.appendChild(note);
+      setTimeout(() => note.remove(), 1900);
+    }
+
+    document.addEventListener('click', (e) => {
+      const interactive = e.target.closest('button, .kiss-zone, .wish-orb');
+      if (!interactive) createFloatingNote(e.clientX, e.clientY);
+    });
+
+    // Breathe text sync
+    const bt = document.getElementById('breathe-text');
+    const breathWords = ['IN...', 'HOLD...', 'OUT...', 'REST...'];
+    let breathIndex = 0;
+    setInterval(() => {
+      breathIndex = (breathIndex + 1) % breathWords.length;
+      bt.style.opacity = '0';
+      setTimeout(() => {
+        bt.textContent = breathWords[breathIndex];
+        bt.style.opacity = '1';
+      }, 350);
+    }, 4000);
+
+    // Typewriter with intersection observer
+    const letterText = "I know it hurts right now, Jaanu. I wish I could reach through this screen and rub your back or bring you warm tea. Since I'm 700 miles away, I built this space just for you. Every star you see, every breath this page takes, it's me. You are the strongest person I know, and I am right here with you, always. Rest your eyes, my Jupiter.";
+    const typewriter = document.getElementById('typewriter');
+    let typeIndex = 0;
+    let started = false;
+
+    function typeWriter() {
+      if (typeIndex < letterText.length) {
+        typewriter.textContent += letterText.charAt(typeIndex);
+        typeIndex++;
+        setTimeout(typeWriter, prefersReducedMotion ? 0 : 45);
+      }
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !started) {
+          started = true;
+          typeWriter();
         }
-        
-        window.onscroll = () => {
-            if(window.scrollY > 300 && !started) {
-                started = true;
-                typeWriter();
-            }
-        };
+      });
+    }, { threshold: 0.28 });
+    observer.observe(document.querySelector('.letter-section'));
 
-        // 5. Forehead Kiss
-        const kissZone = document.getElementById('kissZone');
-        const kissStatus = document.getElementById('kiss-status');
-        let kTimer;
+    document.getElementById('startButton').addEventListener('click', () => {
+      document.querySelector('.letter-section').scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    });
 
-        kissZone.onmousedown = kissZone.ontouchstart = (e) => {
-            if(e.type === 'touchstart') e.preventDefault();
-            kissStatus.textContent = "SENDING WARMTH...";
-            document.body.style.background = "radial-gradient(circle, #3d0000 0%, #000000 100%)";
-            if ("vibrate" in navigator) navigator.vibrate([200, 400, 200, 800, 200]);
-            
-            kTimer = setTimeout(() => {
-                kissStatus.innerHTML = "I'M RIGHT THERE. ❤️<br>STAY STILL, I'VE GOT YOU.";
-                document.body.style.background = "radial-gradient(circle, #6a0000 0%, #000000 100%)";
-                document.getElementById('kiss-icon').textContent = "💖";
-            }, 2500);
-        };
+    // Forehead kiss interaction
+    const kissZone = document.getElementById('kissZone');
+    const kissStatus = document.getElementById('kiss-status');
+    const kissIcon = document.getElementById('kiss-icon');
+    let kTimer;
+    let kissComplete = false;
 
-        window.onmouseup = window.ontouchend = () => {
-            clearTimeout(kTimer);
-            document.body.style.background = "black";
-            document.getElementById('kiss-icon').textContent = "✨";
-            if(!kissStatus.textContent.includes("THERE")) kissStatus.textContent = "";
-        };
+    function startKiss(e) {
+      if (e.type === 'touchstart') e.preventDefault();
+      kissComplete = false;
+      kissZone.classList.add('holding');
+      kissStatus.textContent = 'SENDING WARMTH...';
+      document.body.style.background = 'radial-gradient(circle, #3d0000 0%, #000000 100%)';
+      if ('vibrate' in navigator) navigator.vibrate([180, 280, 180]);
 
-        // 6. Starfield
-        const canvas = document.getElementById('starfield');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        let stars = [];
-        for(let i=0; i<150; i++) stars.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*1.5, v: Math.random()*0.3});
-        function animate() {
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.fillStyle = "rgba(212,175,55,0.3)";
-            stars.forEach(s => {
-                ctx.beginPath(); ctx.arc(s.x, s.y, s.s, 0, Math.PI*2); ctx.fill();
-                s.y -= s.v; if(s.y<0) s.y = canvas.height;
-            });
-            requestAnimationFrame(animate);
+      kTimer = setTimeout(() => {
+        kissComplete = true;
+        kissStatus.innerHTML = "I'M RIGHT THERE. ❤️<br>STAY STILL, I'VE GOT YOU.";
+        document.body.style.background = 'radial-gradient(circle, #6a0000 0%, #000000 100%)';
+        kissIcon.textContent = '💖';
+        sparkleBurst(kissZone);
+      }, 2500);
+    }
+
+    function endKiss() {
+      clearTimeout(kTimer);
+      kissZone.classList.remove('holding');
+      document.body.style.background = 'radial-gradient(circle at top, rgba(106, 0, 0, 0.28), transparent 38%), #000000';
+      if (!kissComplete) {
+        kissStatus.textContent = '';
+        kissIcon.textContent = '✨';
+      }
+    }
+
+    kissZone.addEventListener('mousedown', startKiss);
+    kissZone.addEventListener('touchstart', startKiss, { passive: false });
+    kissZone.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') startKiss(e);
+    });
+    window.addEventListener('mouseup', endKiss);
+    window.addEventListener('touchend', endKiss);
+    kissZone.addEventListener('keyup', endKiss);
+
+    function sparkleBurst(element) {
+      if (prefersReducedMotion) return;
+      const rect = element.getBoundingClientRect();
+      for (let i = 0; i < 14; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'floating-note';
+        sparkle.textContent = i % 2 ? '✦' : '♡';
+        sparkle.style.left = `${rect.left + rect.width / 2 + (Math.random() - 0.5) * 140}px`;
+        sparkle.style.top = `${rect.top + rect.height / 2 + (Math.random() - 0.5) * 90}px`;
+        sparkle.style.fontSize = `${1.2 + Math.random() * 1.4}rem`;
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 1900);
+      }
+    }
+
+    // Wish orbs
+    const wishMessage = document.getElementById('wish-message');
+    document.querySelectorAll('.wish-orb').forEach(orb => {
+      orb.addEventListener('click', () => {
+        wishMessage.textContent = orb.dataset.message;
+        sparkleBurst(orb);
+      });
+    });
+
+    // Constellation draw
+    const path = document.getElementById('constellationPath');
+    document.getElementById('drawConstellation').addEventListener('click', () => {
+      path.classList.remove('draw');
+      void path.offsetWidth;
+      path.classList.add('draw');
+    });
+
+    // Starfield
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth * window.devicePixelRatio;
+      canvas.height = window.innerHeight * window.devicePixelRatio;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+      seedStars();
+    }
+
+    function seedStars() {
+      const count = Math.min(220, Math.floor(window.innerWidth * window.innerHeight / 6500));
+      stars = Array.from({ length: count }, () => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        s: Math.random() * 1.6 + 0.2,
+        v: Math.random() * 0.24 + 0.04,
+        twinkle: Math.random() * Math.PI * 2
+      }));
+    }
+
+    function animateStars() {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      stars.forEach(s => {
+        s.twinkle += 0.018;
+        const alpha = 0.22 + Math.sin(s.twinkle) * 0.14;
+        ctx.fillStyle = `rgba(212, 175, 55, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.s, 0, Math.PI * 2);
+        ctx.fill();
+        s.y -= s.v;
+        if (s.y < -4) {
+          s.y = window.innerHeight + 4;
+          s.x = Math.random() * window.innerWidth;
         }
-        animate();
+      });
+      requestAnimationFrame(animateStars);
+    }
 
-        // 7. Rest Mode
-        let rTimer;
-        function resetR() {
-            document.getElementById('presence-overlay').classList.remove('active');
-            clearTimeout(rTimer);
-            rTimer = setTimeout(() => document.getElementById('presence-overlay').classList.add('active'), 25000);
-        }
-        ['mousemove', 'scroll', 'touchstart'].forEach(e => window.addEventListener(e, resetR));
-        resetR();
-    </script>
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    animateStars();
+
+    // Rest mode
+    let rTimer;
+    const overlay = document.getElementById('presence-overlay');
+    const wakeBtn = document.getElementById('wakeBtn');
+
+    function resetRestMode() {
+      overlay.classList.remove('active');
+      clearTimeout(rTimer);
+      rTimer = setTimeout(() => overlay.classList.add('active'), 30000);
+    }
+
+    ['mousemove', 'scroll', 'touchstart', 'keydown', 'click'].forEach(eventName => {
+      window.addEventListener(eventName, resetRestMode, { passive: true });
+    });
+
+    wakeBtn.addEventListener('click', resetRestMode);
+    resetRestMode();
+  </script>
 </body>
 </html>
