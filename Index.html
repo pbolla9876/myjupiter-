@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Jupiter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #080305;
+            --deep-red: #4a0404;
+            --gold: #d4af37;
+            --ivory: #fffff0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--ivory);
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            background: radial-gradient(circle at center, #1a0505 0%, #080305 100%);
+        }
+
+        /* Luxury Grain Texture Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Custom Gold Cursor */
+        #cursor {
+            width: 20px; height: 20px;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.1s ease;
+        }
+
+        #cursor-ring {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.2s ease-out;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 10rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            z-index: 2;
+        }
+
+        .rings {
+            position: absolute;
+            width: 500px; height: 500px;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: pulse 4s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.2); opacity: 0.1; }
+            100% { transform: scale(1); opacity: 0.2; }
+        }
+
+        /* Care Cards Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 4rem;
+        }
+
+        .care-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            padding: 2rem;
+            text-align: center;
+            transition: 0.4s;
+            border-radius: 10px;
+        }
+
+        .care-card:hover {
+            transform: translateY(-10px);
+            border-top: 3px solid var(--gold);
+            background: rgba(74, 4, 4, 0.3);
+        }
+
+        /* Section Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hug Button */
+        .hug-btn {
+            width: 148px; height: 148px;
+            background: transparent;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            margin: 50px auto;
+        }
+
+        /* Floating Rose Petals */
+        .petal {
+            position: fixed;
+            top: -10%;
+            color: #ff4d4d;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1000;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
+    <canvas id="bg-canvas" style="position:fixed; top:0; left:0; z-index:-1;"></canvas>
+
+    <section class="hero">
+        <div class="rings" style="width: 400px; height: 400px;"></div>
+        <div class="rings" style="width: 500px; height: 500px; animation-delay: 1s;"></div>
+        <div style="font-size: 3rem;">🌹</div>
+        <h1>Jhansy</h1>
+        <p style="font-family: 'Cinzel'; letter-spacing: 4px;">my psycho · my jupiter · my entire world</p>
+    </section>
+
+    <section class="reveal" style="padding: 100px 20%; background: rgba(74, 4, 4, 0.2);">
+        <h2 style="font-family: 'Great Vibes'; font-size: 4rem; text-align: center; color: var(--gold);">My Letter to You</h2>
+        <div style="border: 1px solid var(--gold); padding: 40px; margin-top: 30px; position: relative;">
+            <p style="font-family: 'Great Vibes'; font-size: 2rem;">My dearest Jupiter,</p>
+            <br>
+            <p>I know today feels heavy. I know your body is tired and the world feels a bit too loud right now. If I were there, I’d be holding your hand, bringing you exactly what you need, and making sure you didn't have to lift a finger.</p>
+            <br>
+            <p>You are my "psycho"—the one who keeps my life exciting—and my "Jupiter," the massive, beautiful center of my gravity. Even from a thousand miles away, my heart is sitting right there beside you on the couch.</p>
+            <br>
+            <p>Please rest for me. Drink plenty of water and let yourself just *be*. You don't have to be strong today. I'm strong enough for both of us.</p>
+            <br>
+            <p>Yours, entirely ♡</p>
+        </div>
+    </section>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('cursor');
+        const ring = document.getElementById('cursor-ring');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            ring.style.left = (e.clientX - 10) + 'px';
+            ring.style.top = (e.clientY - 10) + 'px';
+        });
+
+        // Scroll Reveal Logic
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Petal Animation Script
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.innerHTML = '🌸';
+            petal.className = 'petal';
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            petal.style.fontSize = (Math.random() * 10 + 10) + 'px';
+            document.body.appendChild(petal);
+            setTimeout(() => petal.remove(), 5000);
+        }
+        setInterval(createPetal, 300);
+
+        // Canvas Particles logic would go here
+    </script>
+</body>
+</html>
