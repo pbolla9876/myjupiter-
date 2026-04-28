@@ -9,7 +9,7 @@
         :root {
             --bg-black: #000000;
             --gold: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.4);
+            --gold-glow: rgba(212, 175, 55, 0.6);
             --deep-red: #4a0404;
             --ivory: #fffff0;
         }
@@ -21,7 +21,7 @@
             color: var(--ivory);
             font-family: 'Cormorant Garamond', serif;
             overflow-x: hidden;
-            transition: background 2s ease;
+            transition: background 3s cubic-bezier(0.4, 0, 0.2, 1), filter 3s ease;
         }
 
         /* Presence/Rest Mode Overlay */
@@ -58,33 +58,34 @@
             color: var(--gold);
             z-index: 10;
             display: flex; gap: 8px;
+            transition: text-shadow 2s ease, transform 2s ease;
         }
 
         .jhansy-name span {
             display: inline-block; opacity: 0; filter: blur(20px);
             transform: scale(1.5) translateY(20px);
-            animation: letterBloom 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: letterBloom 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         @keyframes letterBloom {
             0% { opacity: 0; filter: blur(20px); transform: scale(1.5) translateY(20px); }
-            50% { text-shadow: 0 0 50px var(--gold); }
-            100% { opacity: 1; filter: blur(0); transform: scale(1) translateY(0); text-shadow: 0 0 20px var(--gold-glow); }
+            100% { opacity: 1; filter: blur(0); transform: scale(1) translateY(0); }
         }
 
         .subtitle {
             font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 6px;
             color: var(--ivory); opacity: 0; animation: fadeIn 2s ease forwards;
-            animation-delay: 2.5s; margin-top: 20px; text-transform: uppercase;
+            animation-delay: 2.8s; margin-top: 20px; text-transform: uppercase;
         }
 
         @keyframes fadeIn { to { opacity: 0.6; } }
 
-        /* Floating Rose & Rings */
+        /* Floating Rose & Celestial Rings */
         .floating-rose {
             font-size: 3rem; margin-bottom: -10px;
             animation: float 4s ease-in-out infinite;
             filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+            z-index: 11;
         }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
@@ -92,29 +93,37 @@
             position: absolute; border: 1px solid rgba(212, 175, 55, 0.1);
             border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%);
             animation: ringPulse 8s ease-in-out infinite;
+            pointer-events: none;
         }
-        @keyframes ringPulse { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.1; } 50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.2; } }
+        @keyframes ringPulse { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.1; } 50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.2; } }
 
         /* Interaction Cards */
-        section { padding: 100px 10%; position: relative; display: flex; flex-direction: column; align-items: center; }
+        section { padding: 80px 10%; display: flex; flex-direction: column; align-items: center; }
         .luxury-card {
-            background: rgba(8, 8, 8, 0.9); border: 1px solid rgba(212, 175, 55, 0.15);
+            background: rgba(10, 10, 10, 0.95); border: 1px solid rgba(212, 175, 55, 0.1);
             padding: 50px; border-radius: 2px; width: 100%; max-width: 800px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8); transition: 0.5s;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.9); transition: 0.8s;
+            text-align: center;
         }
-        .luxury-card:hover { border-color: var(--gold); }
 
-        /* Forehead Kiss UI */
+        /* Forehead Kiss Zone */
         .kiss-zone {
-            width: 180px; height: 180px; border: 1px solid var(--gold);
+            width: 200px; height: 200px; border: 1px solid var(--gold);
             border-radius: 50%; display: flex; flex-direction: column;
             justify-content: center; align-items: center; cursor: pointer;
-            margin: 40px auto; position: relative; transition: 0.5s;
+            margin: 40px auto; position: relative; transition: transform 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
         }
-        .kiss-zone::before {
-            content: ''; position: absolute; width: 110%; height: 110%;
-            border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 50%;
-            animation: ringPulse 4s infinite;
+        .kiss-zone::after {
+            content: ''; position: absolute; width: 100%; height: 100%;
+            border: 1px solid var(--gold); border-radius: 50%;
+            animation: sonar 3s infinite;
+        }
+        @keyframes sonar { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.5); opacity: 0; } }
+
+        #kiss-status {
+            font-family: 'Cinzel'; font-size: 0.8rem; color: var(--gold);
+            letter-spacing: 3px; margin-top: 20px; min-height: 40px; line-height: 1.6;
         }
 
         .btn-gold {
@@ -122,25 +131,22 @@
             padding: 15px 35px; font-family: 'Cinzel'; cursor: pointer; transition: 0.4s;
             margin-top: 30px; letter-spacing: 3px; text-transform: uppercase; font-size: 0.7rem;
         }
-        .btn-gold:hover { background: var(--gold); color: black; box-shadow: 0 0 20px var(--gold-glow); }
+        .btn-gold:hover { background: var(--gold); color: black; box-shadow: 0 0 30px var(--gold-glow); }
 
-        /* Distance Tracker Footer */
         .distance-footer {
-            padding: 60px; text-align: center; font-family: 'Cinzel';
-            color: var(--gold); border-top: 1px solid rgba(212, 175, 55, 0.1);
+            padding: 80px; text-align: center; font-family: 'Cinzel';
+            color: var(--gold); border-top: 1px solid rgba(212, 175, 55, 0.05);
+            opacity: 0.8;
         }
-
-        .petal { position: fixed; top: -10%; pointer-events: none; z-index: 100; animation: fall linear infinite; }
-        @keyframes fall { to { transform: translateY(110vh) rotate(360deg) translateX(50px); } }
 
     </style>
 </head>
 <body>
 
     <div id="presence-overlay">
-        <span style="font-size: 3rem; margin-bottom: 20px;">🌙</span>
+        <span style="font-size: 3.5rem; margin-bottom: 20px;">🌙</span>
         <h2 style="font-family: 'Great Vibes'; font-size: 3.5rem; color: var(--gold);">I'm right here. Just rest, Jupiter.</h2>
-        <p style="font-family: 'Cinzel'; letter-spacing: 4px; font-size: 0.7rem; opacity: 0.5; margin-top: 20px;">MOVE MOUSE TO WAKE ME</p>
+        <p style="font-family: 'Cinzel'; letter-spacing: 5px; font-size: 0.7rem; opacity: 0.5; margin-top: 25px;">MOVE MOUSE TO WAKE ME</p>
     </div>
 
     <div id="cursor"></div>
@@ -148,77 +154,114 @@
     <canvas id="starfield" style="position:fixed; top:0; left:0; z-index:-1;"></canvas>
 
     <section class="hero">
-        <div class="ring" style="width: 400px; height: 400px;"></div>
-        <div class="ring" style="width: 600px; height: 600px; animation-delay: 1s;"></div>
+        <div class="ring" style="width: 450px; height: 450px;"></div>
+        <div class="ring" style="width: 650px; height: 650px; animation-delay: 2s;"></div>
         <div class="floating-rose">🌹</div>
         <h1 class="jhansy-name" id="nameContainer"></h1>
         <p class="subtitle">my psycho · my jupiter · my entire world</p>
     </section>
 
     <section>
-        <div class="luxury-card" style="text-align: center;">
-            <h2 style="font-family: 'Great Vibes'; font-size: 3rem; color: var(--gold);">The Forehead Kiss</h2>
-            <p style="font-style: italic; opacity: 0.8; margin-top: 10px;">When the pain gets too much, close your eyes and hold this circle.</p>
+        <div class="luxury-card">
+            <h2 style="font-family: 'Great Vibes'; font-size: 3.2rem; color: var(--gold);">The Forehead Kiss</h2>
+            <p style="font-style: italic; opacity: 0.7; margin-top: 15px;">Close your eyes, breathe deep, and hold the circle.</p>
+            
             <div class="kiss-zone" id="kissZone">
-                <span style="font-size: 2.5rem;">✨</span>
-                <span style="font-family: 'Cinzel'; font-size: 0.6rem; letter-spacing: 2px; margin-top: 10px;">HOLD ME</span>
+                <span id="kiss-icon" style="font-size: 2.5rem; transition: 1s;">✨</span>
+                <span style="font-family: 'Cinzel'; font-size: 0.6rem; letter-spacing: 3px; margin-top: 15px;">TOUCH & HOLD</span>
             </div>
-            <p id="kiss-status" style="font-family: 'Cinzel'; font-size: 0.8rem; color: var(--gold); letter-spacing: 2px; height: 20px;"></p>
+            
+            <p id="kiss-status"></p>
         </div>
     </section>
 
     <section>
-        <div class="luxury-card" style="text-align: center;">
-            <h2 style="font-family: 'Great Vibes'; font-size: 3rem; color: var(--gold);">A Reason to Smile</h2>
-            <p id="love-reason" style="font-size: 1.4rem; margin: 40px 0; line-height: 1.6;">You are my center of gravity, Jhansy.</p>
+        <div class="luxury-card">
+            <h2 style="font-family: 'Great Vibes'; font-size: 3.2rem; color: var(--gold);">A Word for You</h2>
+            <p id="love-reason" style="font-size: 1.5rem; margin: 40px 0; line-height: 1.6; min-height: 80px; display: flex; align-items: center; justify-content: center;">
+                You are my center of gravity, Jhansy.
+            </p>
             <button class="btn-gold" onclick="newReason()">Another word of love ✦</button>
         </div>
     </section>
 
     <div class="distance-footer">
-        <p style="font-size: 0.7rem; letter-spacing: 5px; opacity: 0.6;">GEORGIA ——————— 1,200 MILES ——————— YOUR HEART</p>
-        <p style="margin-top: 20px; font-style: italic;">"Distance is just a test to see how far love can travel."</p>
+        <p style="font-size: 0.7rem; letter-spacing: 6px; opacity: 0.5;">GEORGIA <span style="margin: 0 30px;">————————</span> JHANSY</p>
+        <p style="margin-top: 25px; font-style: italic; font-size: 0.9rem;">"Even from a thousand miles away, my heart is right where you are."</p>
     </div>
 
     <script>
-        // 1. Name Animation Setup
+        // 1. Cinematic Name Bloom
         const nameText = "Jhansy";
         const container = document.getElementById('nameContainer');
         nameText.split('').forEach((char, i) => {
             const span = document.createElement('span');
             span.textContent = char;
-            span.style.animationDelay = `${0.3 + (i * 0.15)}s`;
+            span.style.animationDelay = `${0.4 + (i * 0.18)}s`;
             container.appendChild(span);
         });
 
         // 2. Presence / Rest Mode
-        let timeout;
+        let restTimeout;
         const overlay = document.getElementById('presence-overlay');
         function resetTimer() {
             overlay.classList.remove('active');
-            clearTimeout(timeout);
-            timeout = setTimeout(() => overlay.classList.add('active'), 20000); // 20 seconds
+            clearTimeout(restTimeout);
+            restTimeout = setTimeout(() => overlay.classList.add('active'), 25000); // 25s
         }
-        window.onload = resetTimer;
-        document.onmousemove = resetTimer;
-        document.onmousedown = resetTimer;
+        ['mousemove', 'mousedown', 'touchstart', 'scroll', 'keypress'].forEach(e => window.addEventListener(e, resetTimer));
+        resetTimer();
 
-        // 3. Forehead Kiss Logic
+        // 3. ULTRA-CINEMATIC KISS LOGIC
         const kissZone = document.getElementById('kissZone');
         const kissStatus = document.getElementById('kiss-status');
+        const nameHeading = document.getElementById('nameContainer');
+        const kissIcon = document.getElementById('kiss-icon');
         let kissTimer;
-        kissZone.onmousedown = () => {
-            kissStatus.textContent = "SENDING WARMTH...";
-            document.body.style.background = "#2a0000";
+
+        const startKiss = (e) => {
+            if(e.type === 'touchstart') e.preventDefault();
+            
+            kissStatus.innerHTML = "HOLDING YOU CLOSE...";
+            kissIcon.style.transform = "scale(1.5) rotate(15deg)";
+            
+            // Start Visual Bloom
+            document.body.style.background = "radial-gradient(circle, #5a0000 0%, #000000 100%)";
+            document.body.style.filter = "brightness(1.2)";
+
+            // Heartbeat Haptic
+            if ("vibrate" in navigator) {
+                navigator.vibrate([200, 400, 200, 1000, 200, 400, 200, 1000]);
+            }
+
             kissTimer = setTimeout(() => {
-                kissStatus.textContent = "I'M RIGHT THERE. ❤️";
-            }, 2000);
+                kissStatus.innerHTML = "I'M RIGHT THERE. ❤️<br><span style='font-size:0.6rem; opacity:0.6; letter-spacing:1px;'>FEEL MY BREATH ON YOUR FOREHEAD.</span>";
+                
+                // Maximum Bloom Effect
+                document.body.style.background = "radial-gradient(circle, #8b0000 0%, #000000 100%)";
+                nameHeading.style.textShadow = "0 0 40px var(--gold), 0 0 80px #ff0000";
+                nameHeading.style.transform = "scale(1.05)";
+                kissIcon.textContent = "💖";
+            }, 2500);
         };
-        kissZone.onmouseup = () => {
+
+        const endKiss = () => {
             clearTimeout(kissTimer);
+            if ("vibrate" in navigator) navigator.vibrate(0);
+            
+            // Reset Visuals
             document.body.style.background = "black";
-            if(kissStatus.textContent !== "I'M RIGHT THERE. ❤️") kissStatus.textContent = "";
+            document.body.style.filter = "brightness(1)";
+            nameHeading.style.textShadow = "none";
+            nameHeading.style.transform = "scale(1)";
+            kissIcon.style.transform = "scale(1) rotate(0deg)";
+            kissIcon.textContent = "✨";
+            
+            if(!kissStatus.innerHTML.includes("RIGHT THERE")) kissStatus.textContent = "";
         };
+
+        kissZone.onmousedown = kissZone.ontouchstart = startKiss;
+        window.onmouseup = window.ontouchend = endKiss;
 
         // 4. Reason Generator
         const reasons = [
@@ -226,26 +269,28 @@
             "Because your heart is as massive and beautiful as Jupiter.",
             "Because you are the only person who feels like 'home' to me.",
             "Because you handle everything with so much grace, even today.",
-            "Because I love the way you laugh when you're being silly.",
             "Because a world without your voice isn't a world I want to be in.",
+            "Because you're my 'Jupiter'—the center of my gravity.",
             "Because every second with you feels like a cinematic masterpiece.",
-            "Because you're my 'Jupiter'—the biggest and brightest thing in my sky."
+            "Because I'm so incredibly proud of the woman you are."
         ];
         function newReason() {
             const el = document.getElementById('love-reason');
             el.style.opacity = 0;
+            el.style.transform = "translateY(10px)";
             setTimeout(() => {
                 el.textContent = reasons[Math.floor(Math.random() * reasons.length)];
                 el.style.opacity = 1;
+                el.style.transform = "translateY(0)";
             }, 400);
         }
 
-        // 5. Starfield & Particles
+        // 5. Starfield Animation
         const canvas = document.getElementById('starfield');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         let stars = [];
-        for(let i=0; i<150; i++) stars.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*1.5, v: Math.random()*0.4});
+        for(let i=0; i<150; i++) stars.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*1.5, v: Math.random()*0.3});
         function drawStars() {
             ctx.clearRect(0,0,canvas.width,canvas.height);
             ctx.fillStyle = "rgba(212, 175, 55, 0.4)";
@@ -257,8 +302,9 @@
         }
         drawStars();
 
-        // 6. Click Burst
+        // 6. Interactive Click Burst
         document.addEventListener('click', (e) => {
+            if(e.target.closest('.kiss-zone') || e.target.closest('button')) return;
             for (let i = 0; i < 8; i++) {
                 const b = document.createElement('div');
                 b.innerHTML = Math.random() > 0.5 ? '❤️' : '🌹';
@@ -266,15 +312,15 @@
                 b.style.pointerEvents = 'none'; b.style.zIndex = '10000';
                 document.body.appendChild(b);
                 const angle = Math.random() * Math.PI * 2;
-                const dist = Math.random() * 100 + 50;
+                const dist = Math.random() * 120 + 60;
                 b.animate([
                     { transform: 'translate(0, 0) scale(1)', opacity: 1 },
                     { transform: `translate(${Math.cos(angle) * dist}px, ${Math.sin(angle) * dist}px) scale(0)`, opacity: 0 }
-                ], { duration: 1000, easing: 'ease-out' }).onfinish = () => b.remove();
+                ], { duration: 1200, easing: 'ease-out' }).onfinish = () => b.remove();
             }
         });
 
-        // 7. Cursor
+        // 7. Cursor Logic
         const cursor = document.getElementById('cursor');
         const ring = document.getElementById('cursor-ring');
         document.addEventListener('mousemove', (e) => {
@@ -282,16 +328,20 @@
             ring.style.left = (e.clientX - 17) + 'px'; ring.style.top = (e.clientY - 17) + 'px';
         });
 
-        // 8. Petals
+        // 8. Background Petals
         setInterval(() => {
             const p = document.createElement('div');
-            p.className = 'petal'; p.innerHTML = '🌸';
+            p.style.position = 'fixed'; p.style.top = '-10%'; p.style.zIndex = '100';
+            p.style.pointerEvents = 'none'; p.innerHTML = '🌸';
             p.style.left = Math.random() * 100 + 'vw';
             p.style.fontSize = Math.random() * 20 + 10 + 'px';
-            p.style.animationDuration = Math.random() * 5 + 5 + 's';
+            const dur = Math.random() * 5 + 6;
+            p.animate([
+                { transform: 'translateY(0) rotate(0deg)' },
+                { transform: `translateY(110vh) rotate(${Math.random()*360}deg)` }
+            ], { duration: dur * 1000, easing: 'linear' }).onfinish = () => p.remove();
             document.body.appendChild(p);
-            setTimeout(() => p.remove(), 7000);
-        }, 500);
+        }, 600);
     </script>
 </body>
 </html>
