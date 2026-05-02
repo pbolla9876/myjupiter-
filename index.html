@@ -1,297 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>For My Jupiter</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<title>Project JUPITER</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: black;
+  color: white;
+  font-family: 'Courier New', monospace;
+  overflow-x: hidden;
+}
 
-  <style>
-    :root {
-      --black: #070711;
-      --midnight-purple: #120a1f;
-      --deep-purple: #1a1028;
-      --soft-purple: #2a1a40;
-      --lavender: #cdb4ff;
-      --lavender-bright: #e6d8ff;
-      --lavender-glow: rgba(205, 180, 255, 0.55);
-      --pink-lavender: #f1c8ff;
-      --ivory: #f8f5ff;
-      --muted-ivory: rgba(248, 245, 255, 0.74);
-    }
+/* Starfield */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+/* Scene container */
+.scene {
+  height: 500vh;
+  position: relative;
+}
 
-    body {
-      background: linear-gradient(180deg, #1a1028 0%, #0d0918 48%, #070711 100%);
-      color: var(--ivory);
-      font-family: 'Cormorant Garamond', serif;
-      overflow-x: hidden;
-      background-attachment: scroll;
-    }
+/* Jupiter */
+.jupiter {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.6);
+  background: radial-gradient(circle at 30% 30%, #d9a066, #a65c2e, #5a2d1a);
+  box-shadow: 0 0 80px rgba(255,150,100,0.6);
+  transition: transform 0.2s linear;
+}
 
-    canvas { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
+/* Moon orbit */
+.orbit {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 500px;
+  transform: translate(-50%, -50%);
+}
 
-    #presence-star {
-      position: fixed; width: 8px; height: 8px; background: var(--lavender-bright);
-      border-radius: 50%; pointer-events: none; z-index: 25000;
-      box-shadow: 0 0 15px var(--lavender), 0 0 30px var(--pink-lavender);
-      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    }
+.moon {
+  width: 30px;
+  height: 30px;
+  background: #ccc;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
-    .hero {
-      min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
-      align-items: center; text-align: center; padding: 48px 20px; z-index: 3;
-    }
+/* Text sections */
+.section {
+  position: fixed;
+  width: 100%;
+  text-align: center;
+  top: 70%;
+  opacity: 0;
+  transition: opacity 0.6s;
+  padding: 0 20px;
+}
 
-    .jhansy-title {
-      font-family: 'Great Vibes', cursive;
-      font-size: clamp(4.5rem, 15vw, 10.5rem);
-      color: var(--lavender-bright);
-      text-shadow: 0 0 25px var(--lavender-glow);
-      margin-bottom: 0;
-    }
+.active {
+  opacity: 1;
+}
 
-    .luxury-card {
-      background: rgba(12, 8, 22, 0.85);
-      border: 1px solid rgba(205, 180, 255, 0.15);
-      padding: clamp(30px, 5vw, 60px);
-      border-radius: 24px;
-      width: 100%; max-width: 900px;
-      margin: 40px auto;
-      backdrop-filter: blur(15px);
-      box-shadow: 0 30px 100px rgba(0,0,0,0.8);
-    }
+/* Terminal */
+.terminal {
+  position: fixed;
+  top: 20%;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  opacity: 1;
+}
 
-    .script-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px;
-      text-align: left; position: relative;
-    }
-
-    .script-grid::after {
-      content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
-      width: 1px; background: rgba(205, 180, 255, 0.1);
-    }
-
-    .script-col h4 { 
-        font-family: 'Cinzel'; font-size: 0.75rem; letter-spacing: 3px; 
-        color: var(--lavender); margin-bottom: 25px; text-transform: uppercase;
-        border-bottom: 1px solid rgba(205,180,255,0.2); padding-bottom: 10px;
-    }
-    .script-item { margin-bottom: 25px; font-style: italic; font-size: 1.2rem; line-height: 1.5; color: var(--muted-ivory); }
-
-    .pharmacy-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 15px; margin-top: 30px;
-    }
-
-    .pharmacy-btn {
-      background: rgba(205, 180, 255, 0.03);
-      border: 1px solid rgba(205, 180, 255, 0.2);
-      padding: 25px 15px; border-radius: 18px; cursor: pointer;
-      transition: all 0.3s ease; text-align: center;
-    }
-
-    .pharmacy-btn:hover { 
-        background: rgba(205, 180, 255, 0.1); 
-        transform: translateY(-5px);
-        border-color: var(--lavender);
-    }
-
-    .pulse-button {
-      margin-top: 30px; border: 1px solid var(--lavender);
-      color: var(--lavender-bright); background: transparent;
-      border-radius: 999px; padding: 14px 35px;
-      font-family: 'Cinzel'; letter-spacing: 3px; cursor: pointer;
-      transition: all 0.4s ease; text-transform: uppercase; font-size: 0.75rem;
-    }
-
-    .pulse-button:hover { background: var(--lavender-glow); color: white; box-shadow: 0 0 20px var(--lavender-glow); }
-
-    .audio-heart-trigger {
-        font-family: 'Cinzel'; font-size: 0.7rem; margin-top: 25px; 
-        color: var(--lavender); cursor: pointer; letter-spacing: 3px;
-        display: flex; align-items: center; gap: 12px;
-        transition: opacity 0.3s;
-    }
-    .audio-heart-trigger:hover { opacity: 0.7; }
-
-    #gravity-meter {
-        font-family: 'Cinzel'; font-size: 2.2rem; color: var(--lavender-bright);
-        text-shadow: 0 0 15px var(--lavender-glow);
-    }
-
-    @media (max-width: 700px) {
-      .script-grid { grid-template-columns: 1fr; }
-      .script-grid::after { display: none; }
-    }
-  </style>
+/* Telemetry */
+.telemetry {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+</style>
 </head>
-
 <body>
-  <canvas id="starfield"></canvas>
-  <div id="presence-star"></div>
 
-  <section class="hero">
-    <div style="font-size: 3rem; margin-bottom: 10px; filter: drop-shadow(0 0 10px var(--lavender));">🪐</div>
-    <h1 class="jhansy-title">Jhansy</h1>
-    <p class="cinzel" style="letter-spacing: 10px; opacity: 0.6; margin-bottom: 20px;">My Jupiter</p>
-    
-    <div class="audio-heart-trigger" id="audioToggle">
-        <span id="audioStatus">LISTEN TO MY HEART</span>
-        <div style="width: 30px; height: 1px; background: var(--lavender);"></div>
-        <span id="audioIcon">▶</span>
-    </div>
-    <audio id="heartAudio" src="YOUR_VOICE_NOTE_URL_HERE" loop></audio>
+<canvas id="stars"></canvas>
 
-    <div class="luxury-card" style="margin-top: 50px; max-width: 400px; padding: 30px;">
-        <h3 class="cinzel" style="font-size: 0.65rem; opacity: 0.7;">Current Attraction Gravity</h3>
-        <p id="gravity-meter">24.79 m/s²</p>
-        <p style="font-style: italic; opacity: 0.5; font-size: 0.85rem; margin-top: 10px;">Atlanta → Valparaiso</p>
-    </div>
+<div class="terminal" id="terminal">
+  <p>Initializing Mission Control...</p>
+  <p>LOG: 2025-11-05 17:20 – First Contact</p>
+  <p>LOCATION: Southlake Mall – H&M Pickup</p>
+  <p>STATUS: Gravitational anomaly detected...</p>
+</div>
 
-    <button class="pulse-button" onclick="document.getElementById('script-section').scrollIntoView({behavior:'smooth'})">Enter the Script</button>
-  </section>
+<div class="telemetry" id="telemetry">Altitude: 1000 km</div>
 
-  <section id="script-section" style="padding: 100px 8%;">
-    <div class="luxury-card">
-      <h2 style="font-family: 'Great Vibes'; font-size: 3.5rem; color: var(--lavender-bright); margin-bottom: 10px;">The Shared Script</h2>
-      <p class="cinzel" style="font-size: 0.7rem; opacity: 0.5; margin-bottom: 30px;">Version 2.0 — Written in the Stars</p>
-      
-      <div class="script-grid">
-        <div class="script-col">
-          <h4>What the world sees</h4>
-          <div class="script-item">"A woman who handles everything with a smile."</div>
-          <div class="script-item">"700 miles of quiet distance between two lives."</div>
-          <div class="script-item">"Arguments that look like a maturity test."</div>
-        </div>
-        <div class="script-col">
-          <h4>What Ram sees</h4>
-          <div class="script-item">"My Jupiter, who deserves a place to finally rest."</div>
-          <div class="script-item">"A bridge of thoughts I cross every single second."</div>
-          <div class="script-item">"A 'Psycho' I’d choose to fight with for 100 years."</div>
-        </div>
-      </div>
-    </div>
+<div class="scene">
+  <div class="jupiter" id="jupiter"></div>
+  <div class="orbit" id="orbit">
+    <div class="moon" id="moon"></div>
+  </div>
 
-    <div class="luxury-card" style="margin-top: 60px;">
-        <h2 style="font-family: 'Great Vibes'; font-size: 3.5rem; color: var(--lavender-bright); margin-bottom: 5px;">Digital Pharmacy</h2>
-        <p class="cinzel" style="font-size: 0.65rem; opacity: 0.6; margin-bottom: 30px;">Immediate relief for my favorite person</p>
-        
-        <div class="pharmacy-grid">
-            <div class="pharmacy-btn" onclick="showCare('Loading 700 miles of warmth... Hug delivered. Check your shoulders. It\'s me. 💜')">
-                <span style="font-size: 1.8rem;">🏠</span><br><br>
-                <span class="cinzel" style="font-size: 0.7rem;">A Hug from Georgia</span>
-            </div>
-            <div class="pharmacy-btn" onclick="showCare('I am watching your water intake from 700 miles away. Drink a glass now. That\'s an order, Jaanu! 🍵')">
-                <span style="font-size: 1.8rem;">💊</span><br><br>
-                <span class="cinzel" style="font-size: 0.7rem;">Medicine Remonstrance</span>
-            </div>
-            <div class="pharmacy-btn" onclick="showCare('Jupiter is vast and beautiful. I am just a moon, forever caught in your gravity, always watching. 🌙')">
-                <span style="font-size: 1.8rem;">🪐</span><br><br>
-                <span class="cinzel" style="font-size: 0.7rem;">Jupiter\'s Moon</span>
-            </div>
-            <div class="pharmacy-btn" onclick="showPsycho()">
-                <span style="font-size: 1.8rem;">🃏</span><br><br>
-                <span class="cinzel" style="font-size: 0.7rem;">For My Psycho</span>
-            </div>
-        </div>
-        <div style="min-height: 80px; display: flex; align-items: center; justify-content: center;">
-            <p id="care-display" style="margin-top: 30px; font-style: italic; color: var(--lavender-bright); font-size: 1.3rem; text-shadow: 0 0 10px rgba(205,180,255,0.3);"></p>
-        </div>
-    </div>
-  </section>
+  <!-- Sections -->
+  <div class="section" id="s1">
+    Gurthunda Jhansy?<br>
+    Aarambham gurinchi post chudagane... mana modati adugulu gurthochayi.
+  </div>
 
-  <footer style="padding: 120px 20px; text-align: center;">
-    <p class="cinzel" style="opacity: 0.4; font-size: 0.7rem; letter-spacing: 5px;">THE SCRIPT ENDS HERE — THE JOURNEY CONTINUES</p>
-    <p style="margin-top: 30px; font-family: 'Great Vibes'; color: var(--lavender-bright); font-size: 2.5rem;">I'm right here, Jhansy.</p>
-  </footer>
+  <div class="section" id="s2">
+    Insta suggestions lo nee profile chusanu...<br>
+    Basketball court DP.<br>
+    Naa prapancham loki oka kottha grahanam vachindi.
+  </div>
 
-  <script>
-    // Optimized Starfield
-    const canvas = document.getElementById('starfield');
-    const ctx = canvas.getContext('2d');
-    let stars = [];
+  <div class="section" id="s3">
+    November 5th, 5:20 PM.<br>
+    Southlake Mall. H&M side.<br>
+    Oka pickup... oka turning point.
+  </div>
 
-    function initStars() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      stars = Array.from({length: 180}, () => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 1.8,
-        speed: Math.random() * 0.05 + 0.02
-      }));
+  <div class="section" id="s4">
+    Coffee ki "No."<br>
+    Sunday ki "No."<br>
+    Prathi sari... "No."
+  </div>
+
+  <div class="section" id="s5">
+    Ninnu nenu endhuku Jupiter ani pilustano telsa?<br>
+    Nee preme naa gravity.<br>
+    Nenu ni chuttu tirige chandrudini matrame.
+  </div>
+
+  <div class="section" id="s6">
+    Ecstasy of loving you...<br>
+    Agony of losing you...<br>
+    rendu okesari.
+  </div>
+
+  <div class="section" id="s7">
+    Aa roju pickup chesina driver...<br>
+    ippatiki nee gravity lone unnadu.
+  </div>
+
+  <div class="section" id="s8">
+    Our story started with a ride...<br>
+    and ended with the Moon losing its Planet.<br><br>
+    — Prakhyath
+  </div>
+</div>
+
+<script>
+/* Starfield */
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars = [];
+for (let i = 0; i < 200; i++) {
+  stars.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 1.5
+  });
+}
+
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+  stars.forEach(s => {
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+drawStars();
+
+/* Scroll logic */
+const sections = document.querySelectorAll(".section");
+const jupiter = document.getElementById("jupiter");
+const orbit = document.getElementById("orbit");
+const telemetry = document.getElementById("telemetry");
+
+window.addEventListener("scroll", () => {
+  let scrollY = window.scrollY;
+  let h = window.innerHeight;
+
+  sections.forEach((sec, i) => {
+    if (scrollY > i * h * 0.7 && scrollY < (i + 1) * h * 0.7) {
+      sec.classList.add("active");
+    } else {
+      sec.classList.remove("active");
     }
+  });
 
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#e6d8ff";
-      stars.forEach(s => {
-        ctx.globalAlpha = 0.3 + Math.abs(Math.sin(Date.now() * s.speed * 0.01) * 0.5);
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
-        ctx.fill();
-      });
-      requestAnimationFrame(animate);
-    }
+  /* Zoom Jupiter */
+  let scale = 0.6 + scrollY / 2000;
+  jupiter.style.transform = `translate(-50%, -50%) scale(${scale})`;
 
-    window.addEventListener('resize', initStars);
-    initStars();
-    animate();
+  /* Orbit rotation */
+  orbit.style.transform =
+    `translate(-50%, -50%) rotate(${scrollY * 0.1}deg)`;
 
-    // Interaction Star
-    const star = document.getElementById('presence-star');
-    document.addEventListener('mousemove', (e) => {
-      star.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-      star.style.opacity = '1';
-    });
+  /* Telemetry */
+  let altitude = Math.max(0, 1000 - Math.floor(scrollY / 5));
+  telemetry.innerText = `Altitude: ${altitude} km`;
 
-    // Audio Logic
-    const audio = document.getElementById('heartAudio');
-    const audioToggle = document.getElementById('audioToggle');
-    const audioStatus = document.getElementById('audioStatus');
-    const audioIcon = document.getElementById('audioIcon');
+  /* Final drift */
+  if (scrollY > 3000) {
+    document.getElementById("moon").style.transform =
+      `translateX(${scrollY / 10}px)`;
+  }
+});
+</script>
 
-    audioToggle.addEventListener('click', () => {
-        if (audio.paused) {
-            audio.play();
-            audioStatus.innerText = "YOU ARE HEARING ME";
-            audioIcon.innerText = "⏸";
-        } else {
-            audio.pause();
-            audioStatus.innerText = "LISTEN TO MY HEART";
-            audioIcon.innerText = "▶";
-        }
-    });
-
-    // Pharmacy Functions
-    function showCare(msg) {
-        const display = document.getElementById('care-display');
-        display.style.opacity = 0;
-        setTimeout(() => {
-            display.innerText = msg;
-            display.style.opacity = 1;
-        }, 200);
-    }
-
-    function showPsycho() {
-        const stories = [
-            "Remember that 48-day trial? We failed the test, but we won the connection. 😂",
-            "I'm Surya in Ghajini right now—violent, angry, and stressed, but I still love Kalpana. 🥺",
-            "I checked the script: Even when I tell you to get lost, I'm secretly hoping you stay. Stay Psycho. 💜"
-        ];
-        showCare(stories[Math.floor(Math.random() * stories.length)]);
-    }
-
-    // Gravity Pulse
-    function pulseGravity() {
-        const base = 24.79;
-        const drift = Math.sin(Date.now() / 1500) * 0.3;
-        document.getElementById('gravity-meter').innerText = (base + drift).toFixed(2) + " m/s²";
-    }
-    setInterval(pulseGravity, 100);
-  </script>
 </body>
 </html>
