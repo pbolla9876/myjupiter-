@@ -1,41 +1,33 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Congratulations Jhansy | Graduation Day</title>
+    <title>Congratulations Jhansy | Graduation Surprise</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-grad: linear-gradient(135deg, #ff0080, #7928ca, #3b82f6, #ff8a00);
-            --card-bg: rgba(255, 255, 255, 0.94);
+            --inner-bg: rgba(255, 255, 255, 0.96);
             --text-dark: #1e293b;
             --accent-gold: #b59410;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* Lock the viewport securely to manage the layout via script */
         body, html {
             height: 100vh;
             width: 100vw;
             overflow: hidden;
             font-family: 'Montserrat', sans-serif;
-            background: var(--primary-grad);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: #06040a;
             display: flex;
             justify-content: center;
             align-items: center;
-            touch-action: none; /* Prevents default browser elastic scrolling on mobile */
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            perspective: 1200px; /* Essential for 3D card opening realism */
+            touch-action: none;
         }
 
         canvas#celebrationCanvas {
@@ -46,37 +38,114 @@
             height: 100%;
             pointer-events: none;
             z-index: 100;
+            opacity: 0;
+            transition: opacity 1.5s ease;
         }
 
-        /* Card container configured to scale beautifully on small screens */
-        .card {
+        #experienceWrapper {
             position: relative;
-            z-index: 10;
             width: 92%;
             max-width: 620px;
-            max-height: 94vh; 
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            height: 90vh;
+            max-height: 750px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 1. CARD COVER (Using your uploaded Jupiter image dynamically) */
+        .card-cover {
+            position: absolute;
+            width: 100%;
+            height: 65vh;
+            max-height: 480px;
+            /* Injected your uploaded Jupiter image right here */
+            background: linear-gradient(rgba(18, 14, 36, 0.85), rgba(26, 21, 53, 0.85)), url('Jupiter.jpg');
+            background-size: cover;
+            background-position: center;
+            border: 2px solid var(--accent-gold);
             border-radius: 16px;
-            padding: 30px 25px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            opacity: 0;
-            transform: scale(0.92) translateY(10px);
-            transition: all 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 50;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Houses the virtual scroll track interior safely */
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), inset 0 0 50px rgba(0,0,0,0.8);
+            transform-origin: center center;
+            transition: all 1.3s cubic-bezier(0.76, 0, 0.24, 1);
+            padding: 30px;
+            text-align: center;
         }
 
-        .card.active {
+        .cover-accent {
+            font-family: 'Cinzel', serif;
+            color: var(--accent-gold);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+
+        .cover-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            color: #ffffff;
+            font-weight: 700;
+            letter-spacing: 2px;
+            line-height: 1.4;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
+
+        .cover-prompt {
+            margin-top: 40px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: breathe 2s infinite ease-in-out;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.4; transform: scale(0.98); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+
+        /* 2. THE MAIN INTERNAL KEEPSAKE CARD (Revealed underneath) */
+        .card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: var(--inner-bg);
+            border-radius: 16px;
+            padding: 35px 25px 25px 25px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 10;
+            opacity: 0;
+            transform: scale(0.8) translateZ(-150px);
+            transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* --- VIDEO MOVEMENT TRANSITIONS --- */
+        .experience-activated .card-cover {
+            opacity: 0;
+            transform: scale(1.15) rotateY(-45deg) translateZ(400px);
+            pointer-events: none;
+        }
+
+        .experience-activated .card {
             opacity: 1;
-            transform: scale(1) translateY(0);
+            transform: scale(1) translateZ(0);
         }
 
-        /* --- THE VIRTUAL SCROLL SYSTEM --- */
+        /* --- SCROLL COMPONENT MECHANICS --- */
         .scroll-window {
             width: 100%;
             overflow: hidden;
@@ -85,7 +154,6 @@
             margin: 15px 0;
         }
 
-        /* The moving layout track adjusted by the animation script */
         .scroll-track {
             width: 100%;
             position: absolute;
@@ -100,13 +168,13 @@
             color: var(--accent-gold);
             letter-spacing: 4px;
             font-size: 0.7rem;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-transform: uppercase;
         }
 
         .title {
             font-family: 'Great Vibes', cursive;
-            font-size: clamp(2.5rem, 7vw, 3.8rem);
+            font-size: clamp(2.6rem, 7.5vw, 3.8rem);
             color: #7928ca;
             margin-bottom: 2px;
             line-height: 1;
@@ -122,12 +190,11 @@
         }
 
         .message-box {
-            font-size: clamp(0.95rem, 2.3vh, 1.05rem);
-            line-height: 1.75;
+            font-size: clamp(0.98rem, 2.3vh, 1.08rem);
+            line-height: 1.8;
             color: var(--text-dark);
             text-align: center;
             font-weight: 400;
-            letter-spacing: 0.1px;
         }
 
         .message-box em {
@@ -143,10 +210,10 @@
 
         .signature {
             font-family: 'Great Vibes', cursive;
-            font-size: clamp(1.8rem, 4vh, 2.2rem);
+            font-size: clamp(1.9rem, 4vh, 2.3rem);
             color: #7928ca;
             text-align: right;
-            margin-top: 25px;
+            margin-top: 30px;
             padding-right: 10px;
         }
 
@@ -156,110 +223,140 @@
             height: 30px;
             border: 2px solid var(--accent-gold);
             pointer-events: none;
-            opacity: 0.5;
+            opacity: 0.4;
         }
         .top-left { top: 15px; left: 15px; border-right: none; border-bottom: none; }
         .bottom-right { bottom: 15px; right: 15px; border-left: none; border-top: none; }
 
-        /* Elegant visual hint for mobile showing there's more text below */
         .scroll-indicator {
             font-size: 0.65rem;
             color: var(--accent-gold);
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-top: 5px;
-            opacity: 0.6;
+            opacity: 0.7;
             animation: pulse 2s infinite ease-in-out;
         }
 
         @keyframes pulse {
             0%, 100% { opacity: 0.3; transform: translateY(0); }
-            50% { opacity: 0.8; transform: translateY(3px); }
+            50% { opacity: 0.9; transform: translateY(4px); }
+        }
+
+        .ambient-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(121,40,202,0.18) 0%, rgba(0,0,0,0) 70%);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
 
+    <div class="ambient-glow"></div>
     <canvas id="celebrationCanvas"></canvas>
 
-    <div class="card" id="mainCard">
-        <div class="corner top-left"></div>
-        <div class="corner bottom-right"></div>
+    <div id="experienceWrapper">
         
-        <p class="meta-header">Celebration Uplink // Sector Grad</p>
-        <h1 class="title">Happy Graduation Day</h1>
-        <p class="subtitle">For My Planet, Jhansy</p>
-
-        <div class="scroll-window" id="scrollWindow">
-            <div class="scroll-track" id="scrollTrack">
-                <div class="message-box">
-                    Today is completely yours. Innallu nuvvu padda kashtham, nee absolute dedication, prathi sleepless night... ivanni ippudu oka goppa vijayamga nee munde unnaayi. Ee tholipaata nee <em>future</em> ki oka adbhuthamaina modalavvali.
-                    <br><br>
-                    Nuvvu eppatiki oka viluvaina, bright star vi. Ninnu nenu endhuku <strong>Jupiter</strong> ani pilustano telsa? Unna planets lo Jupiter ki matrame high gravity untundi. It holds everything together effortlessly. Exactly, nee talent, nee resilience, nee smile kuda anthe—vaatiki chala pedda gravity undhi.
-                    <br><br>
-                    Nuvvu korukunna prasanthatha, nuvvu chudalsina goppa prapancham anni neku dakkalani nenu manasara korukuntunnanu. Even though I am far away in Atlanta very soon <em>unreachable distance</em> ki velthanu, but please know that I am looking at your achievement with immense respect and endless pride.
-                    <br><br>
-                    Go walk across that stage with your head held high. You earned every single bit of this beautiful moment. <strong>Happy Graduation Day, my planet!</strong>
-                </div>
-                <p class="signature">- Bolla Prakhyath</p>
-            </div>
+        <div class="card-cover" id="cardCover" onclick="openSurpriseCard()">
+            <p class="cover-accent">Secure Connection Established</p>
+            <h2 class="cover-title">Incoming Graduation Transmission<br>For Planet Jupiter</h2>
+            <p class="cover-prompt">✦ Tap to Open Card ✦</p>
         </div>
 
-        <div class="scroll-indicator" id="indicator">↓ Swipe smoothly to read ↓</div>
+        <div class="card" id="mainCard">
+            <div class="corner top-left"></div>
+            <div class="corner bottom-right"></div>
+            
+            <p class="meta-header">Celebration Uplink // Sector Grad</p>
+            <h1 class="title">Happy Graduation Day</h1>
+            <p class="subtitle">For My Planet, Jhansy</p>
+
+            <div class="scroll-window" id="scrollWindow">
+                <div class="scroll-track" id="scrollTrack">
+                    <div class="message-box">
+                        Today is completely yours. Innallu nuvvu padda kashtham, nee absolute dedication, prathi sleepless night... ivanni ippudu oka goppa vijayamga nee munde unnaayi. Ee tholipaata nee <em>future</em> ki oka adbhuthamaina modalavvali.
+                        <br><br>
+                        Nuvvu eppatiki oka viluvaina, bright star vi. Ninnu nenu endhuku <strong>Jupiter</strong> ani pilustano telsa? Unna planets lo Jupiter ki matrame high gravity untundi. It holds everything together effortlessly. Exactly, nee talent, nee resilience, nee smile kuda anthe—vaatiki chala pedda gravity undhi.
+                        <br><br>
+                        Nuvvu korukunna prasanthatha, nuvvu chudalsina goppa prapancham anni neku dakkalani nenu manasara korukuntunnanu. Even though I am far away in Atlanta very soon <em>unreachable distance</em> ki velthanu, but please know that I am looking at your achievement with immense respect and endless pride.
+                        <br><br>
+                        Go walk across that stage with your head held high. You earned every single bit of this beautiful moment. <strong>Happy Graduation Day, my planet!</strong>
+                    </div>
+                    <p class="signature">- Bolla Prakhyath</p>
+                </div>
+            </div>
+
+            <div class="scroll-indicator" id="indicator">↓ Swipe smoothly to read ↓</div>
+        </div>
+        
     </div>
 
     <script>
-        // --- 1. RIGID TOUCH & MOUSE SMOOTH SCROLL TRACKER ---
+        function openSurpriseCard() {
+            const container = document.getElementById('experienceWrapper');
+            const fxCanvas = document.getElementById('celebrationCanvas');
+            
+            container.classList.add('experience-activated');
+            fxCanvas.style.opacity = "1";
+            
+            initFX();
+            animationLoop();
+            updateScroll();
+        }
+
+        // --- MOBILE TOUCH SWIPING SMOOTHNESS ---
         const windowEl = document.getElementById('scrollWindow');
         const track = document.getElementById('scrollTrack');
         const indicator = document.getElementById('indicator');
         
         let targetY = 0;
         let currentY = 0;
-        const ease = 0.08; // Higher ease for hyper-responsive swiping on mobile devices
+        const ease = 0.08;
 
-        // Get the limit bounds dynamically based on viewport sizing
         function getLimit() {
             return Math.max(0, track.offsetHeight - windowEl.offsetHeight);
         }
 
-        // Desktop Wheel Input Tracker
         window.addEventListener('wheel', (e) => {
+            if(!document.getElementById('experienceWrapper').classList.contains('experience-activated')) return;
             targetY += e.deltaY * 0.4;
             targetY = Math.max(0, Math.min(targetY, getLimit()));
         });
 
-        // Mobile Touch Gestures Configuration with Inertia Tracking
         let startY = 0;
         window.addEventListener('touchstart', (e) => {
             startY = e.touches[0].clientY;
         }, { passive: true });
 
         window.addEventListener('touchmove', (e) => {
+            if(!document.getElementById('experienceWrapper').classList.contains('experience-activated')) return;
             let currentTouchY = e.touches[0].clientY;
             let deltaY = startY - currentTouchY;
             
-            targetY += deltaY * 1.2; // Smooth multiplication for drag matching
+            targetY += deltaY * 1.2;
             targetY = Math.max(0, Math.min(targetY, getLimit()));
-            startY = currentTouchY; // Continually reset point mapping loops
+            startY = currentTouchY;
         }, { passive: true });
 
         function updateScroll() {
             currentY += (targetY - currentY) * ease;
             track.style.transform = `translateY(-${currentY}px)`;
 
-            // Hide the swipe indicator once she begins exploring down the page
-            if (currentY > 20) {
+            if (currentY > 15) {
                 indicator.style.opacity = "0";
-                indicator.style.transition = "opacity 0.5s ease";
+                indicator.style.transition = "opacity 0.4s ease";
             } else {
-                indicator.style.opacity = "0.6";
+                indicator.style.opacity = "0.7";
             }
-
             requestAnimationFrame(updateScroll);
         }
 
-        // --- 2. CELEBRATION FX ENGINE (CONFETTI & BALLOONS) ---
+        // --- FESTIVE BALLOONS & CONFETTI REACTION LOOP ---
         const canvas = document.getElementById('celebrationCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -268,10 +365,9 @@
         function initFX() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            document.getElementById('mainCard').classList.add('active');
             
-            for (let i = 0; i < 75; i++) particles.push(new Confetti());
-            for (let i = 0; i < 14; i++) balloons.push(new Balloon());
+            for (let i = 0; i < 85; i++) particles.push(new Confetti());
+            for (let i = 0; i < 15; i++) balloons.push(new Balloon());
         }
 
         class Confetti {
@@ -375,14 +471,8 @@
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            targetY = Math.max(0, Math.min(targetY, getLimit())); // Readjust boundary locks
+            targetY = Math.max(0, Math.min(targetY, getLimit()));
         });
-
-        window.onload = () => {
-            initFX();
-            animationLoop();
-            updateScroll();
-        };
     </script>
 </body>
 </html>
