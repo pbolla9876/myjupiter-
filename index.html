@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         :root {
+            /* Smooth, premium celebratory background matrix */
+            --bg-animation-grad: linear-gradient(135deg, #090714, #130d2a, #0b112c, #050308);
             --inner-bg: rgba(255, 255, 255, 0.96);
             --text-dark: #1e293b;
             --accent-gold: #b59410;
@@ -21,12 +23,22 @@
             width: 100vw;
             overflow: hidden;
             font-family: 'Montserrat', sans-serif;
-            background: #06040a;
+            /* Injected the seamless, rich deep animated background gradient */
+            background: var(--bg-animation-grad);
+            background-size: 400% 400%;
+            animation: elegantShift 18s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
             perspective: 1500px;
             touch-action: none;
+        }
+
+        /* Ambient subtle background movement */
+        @keyframes elegantShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         canvas#celebrationCanvas {
@@ -53,34 +65,33 @@
             transform-style: preserve-3d;
         }
 
-        /* 1. COVER PAGE - FIXED TO ENSURE THE FULL IMAGE IS SHOWN WITHOUT CLIPPING */
+        /* 1. COVER PAGE - RECONSTRUCTED FOR PURE, CRISP VISIBILITY */
         .card-cover {
             position: absolute;
             width: 100%;
             height: 100%;
             background-image: url('psycho.png');
-            background-size: contain; /* Ensures the whole image scales to fit completely */
+            background-size: contain; 
             background-repeat: no-repeat;
             background-position: center;
-            border: 1px solid rgba(181, 148, 16, 0.3);
             border-radius: 16px;
             z-index: 50;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.95);
+            filter: drop-shadow(0 30px 50px rgba(0,0,0,0.8));
             transform-origin: center center;
             transition: all 1.8s cubic-bezier(0.76, 0, 0.24, 1);
         }
 
-        /* 2. INSIDE LETTER CARD PANEL */
+        /* 2. THE MAIN CELEBRATION WHITE LETTER CARD PANEL */
         .card {
             position: relative;
             width: 100%;
             height: 100%;
             background: var(--inner-bg);
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 45px 40px 30px 40px;
-            box-shadow: 0 35px 80px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 40px 90px rgba(0, 0, 0, 0.65);
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -90,7 +101,7 @@
             transition: all 1.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* --- STAGE TRANSITION RULES --- */
+        /* --- AUTOMATIC 3D REVEAL RULES --- */
         .experience-activated .card-cover {
             opacity: 0;
             transform: scale(1.15) rotateY(-35deg) translateZ(600px);
@@ -102,7 +113,7 @@
             transform: scale(1) rotateX(0deg) translateZ(0);
         }
 
-        /* --- INTERNAL SCROLL LAYOUT PIPELINE --- */
+        /* --- INTERNAL MOBILE SMOOTH SCROLL SYSTEM --- */
         .scroll-window {
             width: 100%;
             overflow: hidden;
@@ -204,9 +215,9 @@
 
         .ambient-glow {
             position: fixed;
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, rgba(121,40,202,0.12) 0%, rgba(0,0,0,0) 70%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(121,40,202,0.15) 0%, rgba(0,0,0,0) 70%);
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             z-index: 1;
@@ -252,7 +263,7 @@
     </div>
 
     <script>
-        // --- 1. TRANSITION TIMER (ADJUSTED TO EXACTLY 5 SECONDS) ---
+        // --- 1. COUNTDOWN CONTROLLER (5 SECONDS HELD TIMEOUT) ---
         window.onload = () => {
             setTimeout(() => {
                 const container = document.getElementById('experienceWrapper');
@@ -264,10 +275,10 @@
                 initFX();
                 animationLoop();
                 updateScroll();
-            }, 5000); // 5000 milliseconds delay hold threshold
+            }, 5000); // 5000ms delay hold
         };
 
-        // --- 2. SMOOTH MOMENTUM SCROLL TRACKER ---
+        // --- 2. GESTURE AND SWIPE INERTIA COMPONENT SYSTEMS ---
         const windowEl = document.getElementById('scrollWindow');
         const track = document.getElementById('scrollTrack');
         const indicator = document.getElementById('indicator');
@@ -314,7 +325,7 @@
             requestAnimationFrame(updateScroll);
         }
 
-        // --- 3. PARTY EFFECTS ENGINE (CONFETTI & BALLOONS) ---
+        // --- 3. CONFETTI & BALLOON PARTICLES LOGIC ---
         const canvas = document.getElementById('celebrationCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -324,8 +335,8 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
-            for (let i = 0; i < 90; i++) particles.push(new Confetti());
-            for (let i = 0; i < 16; i++) balloons.push(new Balloon());
+            for (let i = 0; i < 95; i++) particles.push(new Confetti());
+            for (let i = 0; i < 18; i++) balloons.push(new Balloon());
         }
 
         class Confetti {
