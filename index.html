@@ -25,7 +25,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1500px; /* High depth 3D space matrix */
+            perspective: 1500px;
             touch-action: none;
         }
 
@@ -44,31 +44,33 @@
         #experienceWrapper {
             position: relative;
             width: 95%;
-            max-width: 820px; /* Expanded window space */
-            height: 80vh; /* Scaled larger overall layout frame */
+            max-width: 820px;
+            height: 85vh; 
+            max-height: 700px;
             display: flex;
             justify-content: center;
             align-items: center;
             transform-style: preserve-3d;
         }
 
-        /* 1. CINEMATIC ENLARGED COVER - PURE IMAGE, NO OVERLAPPING TEXT */
+        /* 1. COVER PAGE - FIXED TO ENSURE THE FULL IMAGE IS SHOWN WITHOUT CLIPPING */
         .card-cover {
             position: absolute;
             width: 100%;
             height: 100%;
-            background: url('psycho.png');
-            background-size: cover;
+            background-image: url('psycho.png');
+            background-size: contain; /* Ensures the whole image scales to fit completely */
+            background-repeat: no-repeat;
             background-position: center;
-            border: 2px solid var(--accent-gold);
+            border: 1px solid rgba(181, 148, 16, 0.3);
             border-radius: 16px;
             z-index: 50;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.95), inset 0 0 40px rgba(0,0,0,0.4);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.95);
             transform-origin: center center;
             transition: all 1.8s cubic-bezier(0.76, 0, 0.24, 1);
         }
 
-        /* 2. THE CLEAN INTERNAL SURPRISE CARD (TEXT ONLY) */
+        /* 2. INSIDE LETTER CARD PANEL */
         .card {
             position: relative;
             width: 100%;
@@ -88,7 +90,7 @@
             transition: all 1.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* --- 3D REVEAL TRIGGER TRANSITIONS --- */
+        /* --- STAGE TRANSITION RULES --- */
         .experience-activated .card-cover {
             opacity: 0;
             transform: scale(1.15) rotateY(-35deg) translateZ(600px);
@@ -100,7 +102,7 @@
             transform: scale(1) rotateX(0deg) translateZ(0);
         }
 
-        /* --- INTERNAL SCROLL SYSTEM CONTROLS --- */
+        /* --- INTERNAL SCROLL LAYOUT PIPELINE --- */
         .scroll-window {
             width: 100%;
             overflow: hidden;
@@ -250,7 +252,7 @@
     </div>
 
     <script>
-        // --- 1. INTRO AUTOPLAY TIME CONTROLLER (2-SECOND TICK OVER) ---
+        // --- 1. TRANSITION TIMER (ADJUSTED TO EXACTLY 5 SECONDS) ---
         window.onload = () => {
             setTimeout(() => {
                 const container = document.getElementById('experienceWrapper');
@@ -262,10 +264,10 @@
                 initFX();
                 animationLoop();
                 updateScroll();
-            }, 2000); // 2000ms delay count threshold
+            }, 5000); // 5000 milliseconds delay hold threshold
         };
 
-        // --- 2. MOBILE SCROLL INERTIA CALIBRATOR ---
+        // --- 2. SMOOTH MOMENTUM SCROLL TRACKER ---
         const windowEl = document.getElementById('scrollWindow');
         const track = document.getElementById('scrollTrack');
         const indicator = document.getElementById('indicator');
@@ -312,7 +314,7 @@
             requestAnimationFrame(updateScroll);
         }
 
-        // --- 3. PARTY EFFECTS CANVAS ENGINE ---
+        // --- 3. PARTY EFFECTS ENGINE (CONFETTI & BALLOONS) ---
         const canvas = document.getElementById('celebrationCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
