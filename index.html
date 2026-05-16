@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Vibrant, celebratory gradient keys */
             --primary-grad: linear-gradient(135deg, #ff0080, #7928ca, #3b82f6, #ff8a00);
             --card-bg: rgba(255, 255, 255, 0.94);
             --text-dark: #1e293b;
@@ -18,10 +17,11 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        /* Strictly locking the viewport to one single screen */
         body, html {
-            height: 100%;
-            width: 100%;
-            overflow-x: hidden;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
             font-family: 'Montserrat', sans-serif;
             background: var(--primary-grad);
             background-size: 400% 400%;
@@ -31,14 +31,12 @@
             align-items: center;
         }
 
-        /* Ambient Dynamic Background Shift */
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* Celebration FX Overlay Canvas */
         canvas#celebrationCanvas {
             position: fixed;
             top: 0;
@@ -49,24 +47,27 @@
             z-index: 100;
         }
 
-        /* Elegant Keepsake Card Container */
+        /* Adjusted padding and max-height to ensure zero scrolling */
         .card {
             position: relative;
             z-index: 10;
-            width: 90%;
-            max-width: 650px;
+            width: 92%;
+            max-width: 620px;
+            max-height: 94vh; 
             background: var(--card-bg);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-radius: 16px;
-            padding: 50px 40px;
+            padding: 30px 35px;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.4);
             opacity: 0;
-            transform: scale(0.92) translateY(20px);
+            transform: scale(0.92) translateY(10px);
             transition: all 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .card.active {
@@ -77,38 +78,38 @@
         .meta-header {
             font-family: 'Cinzel', serif;
             color: var(--accent-gold);
-            letter-spacing: 5px;
-            font-size: 0.75rem;
-            margin-bottom: 20px;
+            letter-spacing: 4px;
+            font-size: 0.7rem;
+            margin-bottom: 10px;
             text-transform: uppercase;
         }
 
         .title {
             font-family: 'Great Vibes', cursive;
-            font-size: clamp(3rem, 9vw, 4.5rem);
+            font-size: clamp(2.5rem, 7vw, 3.8rem);
             color: #7928ca;
-            margin-bottom: 10px;
-            line-height: 1.1;
+            margin-bottom: 2px;
+            line-height: 1;
         }
 
         .subtitle {
             font-family: 'Cinzel', serif;
-            font-size: 0.95rem;
-            letter-spacing: 4px;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
             color: var(--text-dark);
-            margin-bottom: 35px;
+            margin-bottom: 20px;
             font-weight: 700;
         }
 
-        /* Content Text Box Configuration */
+        /* Dynamic fluid font size and tighter line height to prevent screen overflow */
         .message-box {
-            font-size: 1.05rem;
-            line-height: 1.9;
+            font-size: clamp(0.85rem, 2.2vh, 1.02rem);
+            line-height: 1.65;
             color: var(--text-dark);
             text-align: center;
             margin: 0 auto;
             font-weight: 400;
-            letter-spacing: 0.2px;
+            letter-spacing: 0.1px;
         }
 
         .message-box em {
@@ -124,24 +125,23 @@
 
         .signature {
             font-family: 'Great Vibes', cursive;
-            font-size: 2.4rem;
+            font-size: clamp(1.8rem, 4vh, 2.2rem);
             color: #7928ca;
             text-align: right;
-            margin-top: 45px;
-            padding-right: 15px;
+            margin-top: 15px;
+            padding-right: 10px;
         }
 
-        /* Border Geometry Accent Details */
         .corner {
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             border: 2px solid var(--accent-gold);
             pointer-events: none;
-            opacity: 0.6;
+            opacity: 0.5;
         }
-        .top-left { top: 20px; left: 20px; border-right: none; border-bottom: none; }
-        .bottom-right { bottom: 20px; right: 20px; border-left: none; border-top: none; }
+        .top-left { top: 15px; left: 15px; border-right: none; border-bottom: none; }
+        .bottom-right { bottom: 15px; right: 15px; border-left: none; border-top: none; }
 
     </style>
 </head>
@@ -180,24 +180,20 @@
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            
-            // Activate structural transition
             document.getElementById('mainCard').classList.add('active');
-            
             createConfetti();
             createBalloons();
         }
 
-        // --- CONFETTI INSTANCE ARCHITECTURE ---
         class Confetti {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height - canvas.height;
-                this.size = Math.random() * 8 + 6;
+                this.size = Math.random() * 6 + 5;
                 this.color = `hsl(${Math.random() * 360}, 85%, 65%)`;
-                this.speed = Math.random() * 2.5 + 2;
+                this.speed = Math.random() * 2 + 1.5;
                 this.angle = Math.random() * 6.28;
-                this.spin = Math.random() * 0.16 - 0.08;
+                this.spin = Math.random() * 0.12 - 0.06;
             }
             update() {
                 this.y += this.speed;
@@ -217,36 +213,33 @@
             }
         }
 
-        // --- BALLOON INSTANCE ARCHITECTURE ---
         class Balloon {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = canvas.height + Math.random() * 400 + 50;
-                this.r = Math.random() * 12 + 18;
+                this.r = Math.random() * 10 + 15;
                 this.color = `hsla(${Math.random() * 360}, 80%, 60%, 0.75)`;
-                this.speed = Math.random() * 1.4 + 1;
-                this.wobble = Math.random() * 0.04 + 0.01;
+                this.speed = Math.random() * 1.2 + 0.8;
+                this.wobble = Math.random() * 0.03 + 0.01;
                 this.wobblePhase = Math.random() * 10;
                 this.popped = false;
             }
             update() {
                 if (this.popped) return;
                 this.y -= this.speed;
-                this.x += Math.sin(this.y * this.wobble + this.wobblePhase) * 0.6;
+                this.x += Math.sin(this.y * this.wobble + this.wobblePhase) * 0.5;
                 
-                // Recirculate balloons cleanly
                 if (this.y < -100) {
                     this.y = canvas.height + 100;
                     this.x = Math.random() * canvas.width;
                 }
                 
-                // Controlled random popping behavior mid-ascent
                 if (this.y < canvas.height * 0.5 && Math.random() < 0.003) {
                     this.popped = true;
-                    this.burstParticles = Array.from({length: 8}, () => ({
+                    this.burstParticles = Array.from({length: 6}, () => ({
                         x: this.x, y: this.y,
-                        vx: (Math.random() - 0.5) * 5,
-                        vy: (Math.random() - 0.5) * 5,
+                        vx: (Math.random() - 0.5) * 4,
+                        vy: (Math.random() - 0.5) * 4,
                         alpha: 1
                     }));
                 }
@@ -258,42 +251,39 @@
                     ctx.ellipse(this.x, this.y, this.r * 0.85, this.r, 0, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    // Base Tie Node
                     ctx.beginPath();
                     ctx.moveTo(this.x, this.y + this.r);
-                    ctx.lineTo(this.x - 3, this.y + this.r + 5);
-                    ctx.lineTo(this.x + 3, this.y + this.r + 5);
+                    ctx.lineTo(this.x - 3, this.y + this.r + 4);
+                    ctx.lineTo(this.x + 3, this.y + this.r + 4);
                     ctx.closePath();
                     ctx.fill();
 
-                    // String Line
                     ctx.beginPath();
                     ctx.strokeStyle = "rgba(255,255,255,0.25)";
                     ctx.lineWidth = 1;
-                    ctx.moveTo(this.x, this.y + this.r + 5);
-                    ctx.lineTo(this.x, this.y + this.r + 35);
+                    ctx.moveTo(this.x, this.y + this.r + 4);
+                    ctx.lineTo(this.x, this.y + this.r + 25);
                     ctx.stroke();
                 } else if (this.burstParticles) {
-                    // Handle Blast Animation Physics
                     this.burstParticles.forEach(p => {
                         p.x += p.vx; p.y += p.vy; p.alpha -= 0.05;
                         if (p.alpha > 0) {
                             ctx.fillStyle = this.color;
                             ctx.globalAlpha = p.alpha;
-                            ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
+                            ctx.beginPath(); ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2); ctx.fill();
                         }
                     });
-                    ctx.globalAlpha = 1.0; // Reset canvas structural alpha
+                    ctx.globalAlpha = 1.0;
                 }
             }
         }
 
         function createConfetti() {
-            for (let i = 0; i < 90; i++) particles.push(new Confetti());
+            for (let i = 0; i < 80; i++) particles.push(new Confetti());
         }
 
         function createBalloons() {
-            for (let i = 0; i < 18; i++) balloons.push(new Balloon());
+            for (let i = 0; i < 15; i++) balloons.push(new Balloon());
         }
 
         function animationLoop() {
