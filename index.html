@@ -25,7 +25,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1500px; /* Enhanced 3D depth environment */
+            perspective: 1500px; /* High depth 3D space matrix */
             touch-action: none;
         }
 
@@ -44,7 +44,7 @@
         #experienceWrapper {
             position: relative;
             width: 95%;
-            max-width: 920px; /* Widened layout to mirror the premium bi-fold card aspect ratio */
+            max-width: 920px; /* Optimized landscape bi-fold aspect boundary ratio */
             height: 85vh;
             max-height: 600px;
             display: flex;
@@ -53,14 +53,15 @@
             transform-style: preserve-3d;
         }
 
-        /* 1. CINEMATIC OUTSIDE COVER (Fades & slides away on auto-timeout) */
+        /* 1. CINEMATIC OUTSIDE ENVELOPE COVER (Displays psycho.png instantly on page load) */
         .card-cover {
             position: absolute;
             width: 100%;
             max-width: 620px;
             height: 65vh;
             max-height: 450px;
-            background: linear-gradient(rgba(18, 14, 36, 0.88), rgba(26, 21, 53, 0.88)), url('Jupiter1.png');
+            /* Updated smoothly to look for psycho.png as the primary face mask */
+            background: linear-gradient(rgba(18, 14, 36, 0.88), rgba(26, 21, 53, 0.88)), url('psycho.png');
             background-size: cover;
             background-position: center;
             border: 2px solid var(--accent-gold);
@@ -111,10 +112,10 @@
             50% { opacity: 1; transform: scale(1.02); }
         }
 
-        /* 2. PREMIUM UNIFORM KEEPSAKE INTERIOR BI-FOLD DESIGN */
+        /* 2. THE PREMIUM INTERIOR BI-FOLD DISPLAY KEEPSAKE */
         .card-container-inner {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Distinct left-letter and right-image canvas split */
+            grid-template-columns: 1fr 1fr; /* Distinct typography panel and graphic panel split */
             width: 100%;
             height: 100%;
             background: var(--inner-bg);
@@ -128,7 +129,7 @@
             transition: all 1.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Left Side: Smooth Scrolling Text Registry Panel */
+        /* Left Side Content Container */
         .left-panel {
             padding: 40px 30px 30px 35px;
             display: flex;
@@ -138,7 +139,7 @@
             position: relative;
         }
 
-        /* Right Side: Showcase Panel Housing Jupiter1.png Natively */
+        /* Right Side Space Canvas Container */
         .right-panel {
             background: #000000;
             display: flex;
@@ -157,7 +158,7 @@
             filter: contrast(1.05) brightness(0.95);
         }
 
-        /* --- TIMEOUT ANIMATION LOGIC STAGING --- */
+        /* --- 3D REVEAL TRIGGER STATIONS --- */
         .experience-activated .card-cover {
             opacity: 0;
             transform: scale(1.1) rotateY(-35deg) translateZ(500px);
@@ -169,7 +170,7 @@
             transform: scale(1) rotateX(0deg) translateZ(0);
         }
 
-        /* --- INTERNAL SCROLL TRACKING MECHANICS --- */
+        /* --- INTERNAL MOBILE SCROLL PIPELINE --- */
         .scroll-window {
             width: 100%;
             overflow: hidden;
@@ -270,12 +271,12 @@
             50% { opacity: 0.9; transform: translateY(3px); }
         }
 
-        /* Mobile specific grid stack architecture fallbacks */
+        /* Mobile specific layout component adaptations */
         @media(max-width: 767px) {
             #experienceWrapper { height: 95vh; max-height: 850px; }
             .card-container-inner { grid-template-columns: 1fr; grid-template-rows: 1.2fr 1fr; }
             .left-panel { padding: 25px 20px 15px 20px; border-right: none; border-bottom: 1px solid rgba(181, 148, 16, 0.2); }
-            .right-panel { order: -1; } /* Pushes her profile graphic card directly to the top frame on mobile sizes */
+            .right-panel { order: -1; } /* Positions the embedded graphic face card on top during small viewport states */
         }
 
         .ambient-glow {
@@ -332,7 +333,7 @@
             </div>
 
             <div class="right-panel">
-                <img src="Jupiter1.png" class="jupiter-embedded-art" alt="Jupiter Blended Keepsake Art">
+                <img src="psycho.png" class="jupiter-embedded-art" alt="Jupiter Blended Keepsake Art">
             </div>
             
         </div>
@@ -340,24 +341,24 @@
     </div>
 
     <script>
-        // --- 1. AUTOMATIC 2-SECOND DELAY REVEAL CONTROLLER ---
+        // --- 1. INTRO TRANSITION TIMER (AUTOMATIC 2-SECOND DELAY) ---
         window.onload = () => {
             setTimeout(() => {
                 const container = document.getElementById('experienceWrapper');
                 const fxCanvas = document.getElementById('celebrationCanvas');
                 
-                // Triggers the cinematic 3D unfolding animations
+                // Unlocks structural matrix elements via CSS 3D
                 container.classList.add('experience-activated');
                 fxCanvas.style.opacity = "1";
                 
-                // Initialize background physics systems
+                // Spin execution routines
                 initFX();
                 animationLoop();
                 updateScroll();
-            }, 2000); // Exact 2000ms delay countdown sequence
+            }, 2000); // Exact 2000ms countdown tick execution
         };
 
-        // --- 2. SMOOTH MOBILE & TRACKPAD SCROLL ENGINE ---
+        // --- 2. MOBILE INERTIA TRACK INTERFACE ---
         const windowEl = document.getElementById('scrollWindow');
         const track = document.getElementById('scrollTrack');
         const indicator = document.getElementById('indicator');
@@ -404,7 +405,7 @@
             requestAnimationFrame(updateScroll);
         }
 
-        // --- 3. PARTY EFFECTS ENGINE (CONFETTI & BALLOONS) ---
+        // --- 3. PARTICLE EMISSION SCHEDULER (CONFETTI & BALLOONS) ---
         const canvas = document.getElementById('celebrationCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
